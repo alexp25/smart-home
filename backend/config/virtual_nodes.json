@@ -1,0 +1,246 @@
+[{
+  "data": [],
+  "id": 1220,
+  "ip": "virtual",
+  "type": 1001,
+  "info": {
+    "type": "relay",
+    "class": "virtual-controller"
+  },
+  "sdata": [{
+      "id": 2,
+      "type": "input",
+      "unit": "",
+      "multiplier": 1,
+      "value": 0,
+	  "visible": true
+    },
+    {
+      "id": 3,
+      "type": "output",
+      "unit": "",
+      "multiplier": 1,
+      "value": 0,
+	  "visible": true
+    },
+    {
+      "id": 4,
+      "type": "lower theshold",
+      "unit": "",
+      "multiplier": 1,
+      "value": 20,
+	  "visible": false
+    },
+    {
+      "id": 5,
+      "type": "upper threshold",
+      "unit": "",
+      "multiplier": 1,
+      "value": 50,
+	  "visible": false
+    },
+    {
+      "id": 10,
+      "type": "input node",
+      "unit": "",
+      "multiplier": 1,
+      "value": 255,
+	  "visible": false
+    },
+    {
+      "id": 11,
+      "type": "input channel",
+      "unit": "",
+      "multiplier": 1,
+      "value": 16,
+	  "visible": false
+    },
+    {
+      "id": 20,
+      "type": "output node",
+      "unit": "",
+      "multiplier": 1,
+      "value": 131,
+	  "visible": false
+    },
+    {
+      "id": 21,
+      "type": "output channel",
+      "unit": "",
+      "multiplier": 1,
+      "value": 1,
+	  "visible": false
+    },
+    {
+      "id": 102,
+      "type": "inverted",
+      "unit": "",
+      "multiplier": 1,
+      "value": false,
+	  "visible": true
+    },
+    {
+      "id": 101,
+      "type": "active",
+      "unit": "",
+      "multiplier": 1,
+      "value": true,
+	  "visible": true
+    }
+  ],
+  "commands": [{
+      "name": "id",
+      "type": "value",
+      "minValue": 0,
+      "code": 1
+    },
+    {
+      "name": "input node",
+      "type": "value",
+      "minValue": 0,
+      "code": 10
+    },
+    {
+      "name": "input channel",
+      "type": "value",
+      "minValue": 0,
+      "code": 11
+    },
+    {
+      "name": "output node",
+      "type": "value",
+      "minValue": 0,
+      "code": 20
+    },
+    {
+      "name": "output channel",
+      "type": "value",
+      "minValue": 0,
+      "code": 21
+    },
+    {
+      "name": "lower threshold",
+      "type": "value",
+      "code": 4
+    },
+    {
+      "name": "upper threshold",
+      "type": "value",
+      "code": 5
+    },
+    {
+      "name": "inverted",
+      "type": "cmd",
+      "code": 102
+    },
+    {
+      "name": "enable/disable",
+      "type": "cmd",
+      "code": 101
+    },
+    {
+      "name": "save",
+      "type": "cmd",
+      "code": 201
+    }
+  ],
+  "settings": false
+}, {
+  "data": [],
+  "id": 1221,
+  "ip": "virtual",
+  "type": 1002,
+  "info": {
+    "type": "time_relay",
+    "class": "virtual-controller"
+  },
+  "sdata": [{
+      "id": 3,
+      "type": "output",
+      "unit": "",
+      "multiplier": 1,
+      "value": 0,
+	  "visible": true
+    },
+    {
+      "id": 4,
+      "type": "time on",
+      "unit": "",
+      "multiplier": 1,
+      "value": "08:00:00",
+	  "visible": false
+    },
+    {
+      "id": 5,
+      "type": "time off",
+      "unit": "",
+      "multiplier": 1,
+      "value": "00:00:00",
+	  "visible": false
+    },
+    {
+      "id": 20,
+      "type": "output node",
+      "unit": "",
+      "multiplier": 1,
+      "value": 131,
+	  "visible": false
+    },
+    {
+      "id": 21,
+      "type": "output channel",
+      "unit": "",
+      "multiplier": 1,
+      "value": 1,
+	  "visible": false
+    },
+    {
+      "id": 101,
+      "type": "active",
+      "unit": "",
+      "multiplier": 1,
+      "value": false,
+	  "visible": true
+    }
+  ],
+  "commands": [{
+      "name": "id",
+      "type": "value",
+      "minValue": 0,
+      "code": 1
+    },
+    {
+      "name": "output node",
+      "type": "value",
+      "minValue": 0,
+      "code": 20
+    },
+    {
+      "name": "output channel",
+      "type": "value",
+      "minValue": 0,
+      "code": 21
+    },
+    {
+      "type": "time on",
+      "type": "text",
+      "code": 4
+    },
+    {
+      "type": "time off",
+      "type": "text",
+      "code": 5
+    },
+    {
+      "name": "activate",
+      "type": "cmd",
+      "code": 101
+    },
+    {
+      "name": "save",
+      "type": "cmd",
+      "code": 201
+    }
+  ],
+  "settings": false
+}]

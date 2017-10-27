@@ -1,0 +1,67 @@
+{
+  "name": "package.json",
+  "version": "0.0.0",
+  "description": "raspi web app",
+  "main": "package",
+  "keywords": [
+    "raspi"
+  ],
+  "authors": [
+    "Alex Predescu"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.6.2",
+    "angular-animate": "^1.6.2",
+    "angular-bootstrap": "^2.5.0",
+    "angular-cookies": "latest",
+    "angular-material": "0.11.2",
+    "angular-route": "latest",
+    "angular-ui-router": "^0.4.2",
+    "animate.css": "latest",
+    "bootstrap": "^3.3.7",
+    "font-awesome": "latest",
+    "highcharts": "^5.0.7",
+    "highcharts-ng": "^1.0.0",
+    "jquery-ui": "latest",
+    "malihu-custom-scrollbar-plugin": "latest",
+    "angular-ui-bootstrap": "latest",
+    "angular-touch": "latest",
+    "angular-websocket": "latest",
+    "angular-sanitize": "~1.4.8",
+    "bootstrap-switch": "~3.3.2",
+    "angularjs-slider": "~2.11.0",
+    "angular-messages": "~1.5.7",
+    "use-form-error": "~0.0.2",
+    "angular-fusioncharts": "^0.0.2",
+    "fusioncharts": "^3.11.3",
+    "angular-scroll-glue": "^2.1.0",
+    "angular-ui": "^0.4.0",
+    "jquery": "2.2.4",
+    "ionic": "driftyco/ionic-bower#v1.3.2",
+    "ng-csv": "^0.3.6",
+    "angular-local-storage": "^0.5.2",
+    "ngstorage": "ng-storage#^0.4.2",
+    "socket.io-client": "1.4.4",
+    "c3": "^0.4.11"
+  },
+  "resolutions": {
+    "angular": "^1.6.2",
+    "highcharts-ng": "^1.0.0",
+    "highcharts": "^5.0.7",
+    "jquery": "2.2.4",
+    "angular-animate": "1.5.3",
+    "angular-sanitize": "1.5.3",
+    "ionic": "v1.3.2",
+    "angular-material": "0.11.2",
+    "socket.io-client": "1.4.4",
+    "angular-ui-router": "0.2.13"
+  }
+}

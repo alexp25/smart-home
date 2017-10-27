@@ -1,0 +1,27 @@
+<div class="raspi-margin md-primary" layout="column" layout-align="space-between center" ng-init="init();">
+
+  <raspi-html-box flex html="jsondata.info"></raspi-html-box>
+
+  <raspi-html-box flex html="jsondata.fftString"></raspi-html-box>
+
+  <div flex class="raspi-margin" layout="row" style="width:100%">
+    <!-- <raspi-plain-chart ng-if="$root.flagRefresh" flex array="[jsondata.rawData]" options="chart[0].options" update="chupdate"></raspi-plain-chart>
+    <raspi-plain-chart ng-if="$root.flagRefresh" flex array="[jsondata.rawFFT]" options="chart[1].options" update="chupdate"></raspi-plain-chart> -->
+    <div flex>
+      <c3-line cid="1" data="chartData1" options="{ymin:-100,ymax:100,height:300,xtype:'numeric',type:'line'}"></c3-line>
+    </div>
+    <div flex>
+      <c3-line cid="2" data="chartData2" options="{showPoint:true,ymin:0,ymax:100,height:300,xtype:'numeric',type:'line'}"></c3-line>
+    </div>
+  </div>
+
+  <div layout="column" class="raspi-button-holder">
+    <md-button md-no-ink class="md-primary" ng-click="startSound();">
+      Start
+    </md-button>
+    <md-button md-no-ink class="md-primary" ng-click="stopSound();">
+      Stop
+    </md-button>
+  </div>
+
+</div>

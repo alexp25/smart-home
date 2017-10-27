@@ -1,0 +1,53 @@
+<div class="raspi-margin md-primary" layout="column" ng-init="init();">
+  <div layout-gt-md="row" layout="column" layout-align="space-between center" layout-align-gt-md="space-between start">
+
+    <div layout="column" class="raspi-button-holder">
+      <!-- <h4 class="raspi-h4">
+        Automatic Control System Monitor
+      </h4> -->
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Control sensor id</span>
+        <!-- <select class="raspi-numeric-input-s md-primary" ng-model="selectedControlNode" ng-options="element as element.sensorId+' (pot '+element.potId +') ' group by element.Class for element in settings.controlNodes"></select> -->
+        <!-- <md-select ng-model="selectedControlNode">
+          <md-option ng-repeat="element in controlSettingsList" ng-value="element" >
+            {[element.sensorId]}
+          </md-option>
+        </md-select> -->
+        <!-- <input class="raspi-numeric-input-s md-primary" min="0" ng-model="settings.acs_sid" type="number"></input> -->
+
+        <!-- <span class="raspi-label-s">Sensor id</span> -->
+        <md-select aria-hidden="true" ng-change="getData();" ng-model="settings.acs_sid">
+          <md-option ng-repeat="node in nodes" ng-value="node.sensorId">
+            {[node.sensorId]}
+          </md-option>
+        </md-select>
+
+      </md-input-container>
+      <!-- <md-input-container class="input-container">
+        <span class="raspi-label-s">Remove latest samples</span>
+        <input class="raspi-numeric-input-s md-primary" min="0" ng-model="settings.lastNData" type="number"></input>
+      </md-input-container> -->
+      <!-- <label class="raspi-label-m">Update</label> -->
+      <div layout="column">
+        <md-button md-no-ink class="md-primary" ng-click="getData();">Request Data</md-button>
+        <!-- <md-button md-no-ink class="md-primary" ng-click="removeData(1); getData();">Delete Latest</md-button> -->
+        <md-button md-no-ink class="md-primary" filename="control_data.csv" ng-csv="controlData">Export</md-button>
+      </div>
+    </div>
+
+    <div style="width:100%" ng-if="hasData" flex>
+      <!-- <raspi-html-box html="info"></raspi-html-box> -->
+      <!-- <raspi-chart-time array="[array[0],array[1]]" options="chart1.options" update="signalUpdate"></raspi-chart-time> -->
+      <!-- <raspi-plain-chart ng-if="$root.flagRefresh" array="[array1,array2,array3]" options="chart1.options" update="signalUpdate"></raspi-plain-chart> -->
+      <c3-line cid="1" data="chartData" options="{showPoint:true,ymin:0,ymax:100,height:300,xtype:'timeseries',type:'line',format:'%d.%m - %H:%M'}"></c3-line>
+      <!-- <highchart config="testChartConfig"></highchart> -->
+    </div>
+
+    <!-- <highchart config="testChartConfig"></highchart> -->
+  </div>
+
+  <div animate class="raspi-directive-border" flex ng-if="!hasData">
+    <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+  </div>
+
+</div>

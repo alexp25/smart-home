@@ -1,0 +1,1 @@
+db.collection.update({},{$set:{"rk":550}},false,true)

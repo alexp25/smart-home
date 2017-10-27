@@ -1,0 +1,74 @@
+<div class="raspi-margin md-primary" ng-init="init();" layout="column">
+  <raspi-html-box flex html="jsondata.info"></raspi-html-box>
+  <div flex layout-gt-md="row" layout="column" layout-align="space-between center">
+    <!-- <label class="raspi-label-m">Shutdown URL</label>
+    <input class="raspi-numeric-input md-primary" ng-model="mediaServer.urlShutdown" type="text"></input>
+    <label class="raspi-label-m">Cancel URL</label>
+    <input class="raspi-numeric-input md-primary" ng-model="mediaServer.urlCancel" type="text"></input>
+
+    <div layout="column" class="raspi-button-holder">
+      <md-button md-no-ink class="md-primary" ng-click="command('start','')">
+        Start
+      </md-button>
+      <md-button md-no-ink class="md-primary" ng-click="command('shutdown',mediaServer.urlShutdown)">
+        Shut down
+      </md-button>
+      <md-button md-no-ink class="md-primary" ng-click="command('cancel',mediaServer.urlCancel)">
+        Cancel
+      </md-button>
+    </div> -->
+
+    <div layout="column" class="raspi-button-holder">
+      <md-button md-no-ink class="md-primary" ng-click="startVideoRecording()">Start video recording</md-button>
+      <md-button md-no-ink class="md-primary" ng-click="stopVideoRecording()">Stop video recording</md-button>
+      <!-- <md-button md-no-ink class="md-primary" ng-click="downloadLog();">Save log</md-button> -->
+      <md-button md-no-ink class="md-primary" ng-click="downloadServerLog('/api/download/log-dbg');">Download server log</md-button>
+      <md-button md-no-ink class="md-primary" ng-click="downloadServerLog('/api/download/log-tcp-in');">Download tcp in log</md-button>
+      <md-button md-no-ink class="md-primary" ng-click="downloadServerLog('/api/download/log-tcp-out');">Download tcp out log</md-button>
+      <md-button md-no-ink class="md-primary" ng-click="restart();">Restart</md-button>
+    </div>
+
+    <div flex layout="column">
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">server temp (C)</span>
+        <input class="raspi-numeric-input-s md-primary" ng-model="jsondata.temp" type="text"></input>
+      </md-input-container>
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">server cpu (%)</span>
+        <input class="raspi-numeric-input-s md-primary" ng-model="jsondata.cpu" type="text"></input>
+      </md-input-container>
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">video recording</span>
+        <input class="raspi-numeric-input-s md-primary" ng-model="jsondata.rec" type="text"></input>
+      </md-input-container>
+    </div>
+
+    <!-- <raspi-textbox caption="server temp (C)" align="center" text="jsondata.temp"></raspi-textbox>
+    <raspi-textbox caption="server cpu (%)" align="center" text="jsondata.cpu"></raspi-textbox>
+    <raspi-textbox caption="video recording" align="center" text="jsondata.rec"></raspi-textbox> -->
+
+    <!-- <div ng-repeat="(key,value) in jsondata">
+      <div ng-if="!hiddenKey(key)">
+        <raspi-numeric caption="{key}" items="jsondata[key]"></raspi-numeric>
+      </div>
+    </div> -->
+
+  </div>
+
+  <!-- <div ng-repeat="str in jsondata.debug">
+      <raspi-textbox text="str"></raspi-textbox>
+    </div> -->
+  <label class="raspi-label-m">Debug info</label>
+  <!-- <md-checkbox ng-model="cb.autoScroll" aria-label="Checkbox auto scroll">
+    Auto scroll
+  </md-checkbox> -->
+  <!-- <md-input-container style="width:auto; height: 20rem;"> -->
+
+  <textarea name="textarea" style="width:auto; height: 20rem; overflow-y: auto;" class="md-primary" scroll-glue>{[debugInfo]}</textarea>
+
+  <!-- </md-input-container> -->
+
+  <!-- style="width:250px;height:150px;" -->
+
+</div>
+</div>

@@ -1,0 +1,235 @@
+{
+	"monitor":
+		[
+			{
+				"name":"autoUpdate",
+				"caption":"auto update",
+				"type":"check",
+				"default":false
+			},
+			{
+				"name":"updateRate",
+				"caption":"update rate",
+				"type":"numeric",
+				"default":60
+			},
+			{
+				"name":"yAxis",
+				"caption":"y axis",
+				"type":"numeric",
+				"default":30
+			},
+			{
+				"name":"lastHData",
+				"caption":"last h data",
+				"type":"numeric",
+				"default":24
+			},
+			{
+				"name":"maxPlotLength",
+				"caption":"max plot length",
+				"type":"numeric",
+				"default":360
+			},
+			{
+				"name":"lastNData",
+				"caption":"last n data",
+				"type":"numeric",
+				"default":360
+			},
+			{
+				"name":"sensorId",
+				"caption":"sensor id",
+				"type":"numeric",
+				"default":2
+			},
+			{
+				"name":"channelId",
+				"caption":"channel id",
+				"type":"numeric",
+				"default":2
+			},
+			{
+				"name":"requestType",
+				"caption":"request type",
+				"type":"numeric",
+				"default":3
+			},
+			{
+				"name":"reqtime_h",
+				"caption":"request interval h",
+				"type":"numeric",
+				"default":12
+			},
+			{
+				"name":"reqtime_m",
+				"caption":"request interval m",
+				"type":"numeric",
+				"default":0
+			},
+			{
+				"name":"selectedSeries",
+				"caption":"selected series",
+				"type":"numeric",
+				"default":1
+			},
+			{
+				"name":"weatherData",
+				"caption":"display weather data",
+				"type":"check",
+				"default":false
+			},
+			{
+				"name":"chartHeight",
+				"caption":"chart height",
+				"type":"numeric",
+				"default":300
+			},
+			{
+				"name":"appid",
+				"caption":"weather api key",
+				"type":"text",
+				"default":"13d3396479dc92a69c579d67bd4835cc"
+			},
+			{
+				"name":"acs_sid",
+				"caption":"watering system selected control sensor",
+				"type":"numeric",
+				"default":2
+			},
+			{
+				"name":"acs_lastNData",
+				"caption":"watering system last n data",
+				"type":"numeric",
+				"default":10
+			}
+		],
+	"irrigation":[
+			{
+				"name":"trackLength",
+				"caption":"track length",
+				"type":"numeric",
+				"default":25000
+			}
+	],
+	"app":
+		[
+			{
+				"name":"ws_url",
+				"caption":"websocket url",
+				"type": "text",
+				"default":"localhost"
+			},
+			{
+				"name":"debugMode",
+				"caption":"debug mode",
+				"type": "check",
+				"default":false
+			},
+			{
+				"name":"displayGraphicWidgets",
+				"caption":"graphic widgets",
+				"type": "check",
+				"default":false
+			},
+			{
+				"name":"darkTheme",
+				"caption":"dark theme",
+				"type": "check",
+				"default":false
+			},
+			{
+				"name":"navMode",
+				"caption":"Sidenav menu",
+				"type": "check",
+				"default":false
+			}
+		],
+	"control":
+		[
+			{
+				"name":"humRef",
+				"caption":"humidity setpoint",
+				"type": "numeric",
+				"default":500
+			},
+			{
+				"name":"ymin",
+				"caption":"sensor min humidity",
+				"type": "numeric",
+				"default":360
+			},
+			{
+				"name":"ymax",
+				"caption":"sensor max humidity",
+				"type": "numeric",
+				"default":560
+			},
+			{
+				"name":"umin",
+				"caption":"controller min output",
+				"type": "numeric",
+				"default":5
+			},
+			{
+				"name":"umax",
+				"caption":"controller max output",
+				"type": "numeric",
+				"default":60
+			},
+			{
+				"name":"type",
+				"caption":"controller type",
+				"type": "text",
+				"default":"pid"
+			},
+			{
+				"name":"Kp",
+				"caption":"pid kp",
+				"type": "numeric",
+				"default":0
+			},
+			{
+				"name":"Ki",
+				"caption":"pid ki",
+				"type": "numeric",
+				"default":0
+			},
+			{
+				"name":"Kd",
+				"caption":"pid kd",
+				"type": "numeric",
+				"default":0
+			},
+			{
+				"name":"potId",
+				"caption":"pot id",
+				"type": "numeric",
+				"default":0
+			},
+			{
+				"name":"sensorId",
+				"caption":"pot sensor id",
+				"type": "numeric",
+				"default":2
+			},
+			{
+				"name":"um",
+				"caption":"prbs average command",
+				"type": "numeric",
+				"default":30
+			},
+			{
+				"name":"du",
+				"caption":"prbs command delta",
+				"type": "numeric",
+				"default":10
+			},
+			{
+				"name":"enabled",
+				"caption":"enabled",
+				"type": "check",
+				"default":true
+			}
+		]
+}

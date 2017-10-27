@@ -1,0 +1,37 @@
+<div class="raspi-margin md-primary"  ng-init="init();">
+
+  <div layout-gt-md="row" layout="column" layout-align="space-between center" layout-align-gt-md="space-between start">
+
+    <div class="raspi-button-holder" layout="column">
+
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Interval (h)</span>
+        <input aria-hidden="true" class="raspi-numeric-input-s md-primary" max="24" min="0" ng-model="program.interval.h" type="number"></input>
+      </md-input-container>
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Interval (m)</span>
+        <input aria-hidden="true" class="raspi-numeric-input-s md-primary" max="60" min="0" ng-model="program.interval.m" type="number"></input>
+      </md-input-container>
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Interval (s)</span>
+        <input aria-hidden="true" class="raspi-numeric-input-s md-primary" max="60" min="0" ng-model="program.interval.s" type="number"></input>
+      </md-input-container>
+
+      <md-button md-no-ink class="md-primary" ng-click="updateProgram()">Update</md-button>
+      <md-button md-no-ink class="md-primary" ng-click="addData()">Add</md-button>
+      <md-button md-no-ink class="md-primary" ng-click="removeSelectedRow()">Remove</md-button>
+      <md-button md-no-ink class="md-primary" ng-csv="currentProgram.data" filename="program.csv">Export</md-button>
+
+    </div>
+
+    <div flex style="width:100%;max-width:800px;margin-left:20px;margin-right:20px;margin-top:20px;">
+      <span class="raspi-label-m">Watering program</span>
+      <div id="grid1" ui-grid-cellnav ui-grid-edit ui-grid="gridOptions"></div>
+      <!-- <info-list caption="" items="infoList"></info-list> -->
+    </div>
+  </div>
+
+  <div animate class="raspi-directive-border" flex ng-if="!hasData">
+    <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="raspi-margin md-primary" ng-init="init();" layout="column">
+  <div layout="row">
+    <div class="raspi-input-container-m" layout="column">
+      <!-- <h4 class="raspi-h4">
+        Weather settings
+      </h4> -->
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Location</span>
+        <select class="raspi-numeric-input-m md-primary" ng-model="selectedLocation" ng-options="location.name for location in locations"></select>
+      </md-input-container>
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Request type</span>
+        <select class="raspi-numeric-input-m md-primary" ng-model="selectedReqType" ng-options="req.name for req in weatherRequests"></select>
+      </md-input-container>
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">API key</span>
+        <input class="raspi-numeric-input-m md-primary" ng-model="weatherRequest.params.appid" type="text"></input>
+      </md-input-container>
+      <a href="http://openweathermap.org/api">http://openweathermap.org/api</a>
+
+      <div layout="column">
+        <md-button md-no-ink aria-hidden="true" class="md-primary" ng-click="getData();">Request weather data</md-button>
+        <md-button md-no-ink aria-hidden="true" class="md-primary" ng-click="postSettings();">Update settings</md-button>
+      </div>
+    </div>
+    <div flex class="raspi-margin" layout="column" ng-if="hasWeatherData">
+      <div ng-repeat="item in weatherData.list" ng-if="selectedReqType===weatherRequests[0];" class="raspi-frame md-primary">
+        <span class="raspi-label-s">{[(item.dt * 1000) | date : "dd.MM.yyyy"]}</span>
+        <div ng-repeat="(key,value) in item">
+          <span class="raspi-label-s">{[key]}: {[item[key]]}</span>
+        </div>
+      </div>
+      <div layout="column" class="raspi-widget-holder-m" ng-if="selectedReqType===weatherRequests[1];" class="raspi-frame md-primary">
+        <span class="raspi-label-s">{[(weatherData.dt * 1000) | date : "dd.MM.yyyy"]}</span>
+        <div ng-repeat="(key,value) in weatherData.main">
+          <div layout="row" layout-align="space-between center">
+            <span class="raspi-label-s">{[key]}: {[weatherData.main[key]]}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div flex class="raspi-margin" ng-if="!hasWeatherData"></div>
+  </div>
+</div>

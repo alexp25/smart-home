@@ -1,0 +1,17 @@
+<div class="raspi-page" layout="column" ng-init="init();">
+
+  <h1 style="text-align:center;">Config</h1>
+
+  <md-input-container class="input-container">
+    <!-- <span class="raspi-label-s">Username</span> -->
+    <label class="raspi-label-s">API URL (leave empty for web app)</label>
+    <input class="form-control raspi-padding" name="username" ng-model="localStorage.url" required type="text">
+  </md-input-container>
+  <md-input-container class="input-container">
+    <label class="raspi-label-s">Websocket URL (leave empty for web app)</label>
+    <input class="form-control raspi-padding" name="password" ng-model="localStorage.wsurl" required type="text">
+  </md-input-container>
+
+  <md-button class="md-primary" style="min-width:150px;" ng-click="updateStorage();">Ok</md-button>
+
+</div>

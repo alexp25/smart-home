@@ -1,0 +1,55 @@
+<div class="raspi-margin md-primary" ng-init="init();" layout="column">
+  <div layout-align-gt-md="space-between start" layout-align="space-between center" layout-gt-md="row" layout="column">
+    <div class="raspi-margin" layout="column">
+
+      <div layout="column">
+        <md-input-container class="input-container">
+          <span class="raspi-label-s">Sensor id</span>
+          <md-select aria-hidden="true" ng-change="userRequestData();resetAutoUpdate();" ng-model="settings.sensorId">
+            <md-option ng-repeat="node in nodes" ng-value="node.s_id">
+              {[node.s_id]}
+            </md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container class="input-container">
+          <span class="raspi-label-s">Channel id</span>
+          <input aria-hidden="true" class="md-primary" min="1" ng-model="settings.channelId" type="number"></input>
+        </md-input-container>
+        <md-input-container class="input-container">
+          <span class="raspi-label-s">Request</span>
+          <md-select aria-hidden="true" ng-change="userRequestData();resetAutoUpdate();" ng-model="settings.requestType">
+            <md-option ng-repeat="d in requestSettings.options" ng-value="d.value">
+              {[d.label]}
+            </md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+
+      <div class="raspi-button-holder" layout="column">
+        <md-button md-no-ink aria-hidden="true" class="md-primary" ng-click="userRequestData();resetAutoUpdate();">Request data</md-button>
+        <md-button md-no-ink class="md-primary" filename="sensor_data.csv" ng-csv="jsonObj">Export</md-button>
+      </div>
+    </div>
+
+    <div flex class="raspi-margin" layout="column" style="width:100%">
+      <div ng-if="settings.debugMode">
+        <raspi-html-box html="info"></raspi-html-box>
+      </div>
+      <c3-line cid="1" data="chartData" options="{cid:1,height:300,yminspan:10,xtype:'timeseries',type:'line',format:'%d.%m - %H:%M'}"></c3-line>
+      <div layout="column">
+        <div ng-if="settings.debugMode">
+          <raspi-textbox text="'min: ' + localData.min + ' max: ' + localData.max + ' avg: ' + localData.avg + ' last: ' + localData.last"></raspi-textbox>
+        </div>
+        <div layout="column" ng-if="selectedReqType===weatherRequests[1];hasWeatherData===true;">
+          <raspi-textbox text="'temp: '+weatherData.main.temp+'&deg;C  hum: '+weatherData.main.humidity+'%'+'  '+weatherData.weather[0].description"></raspi-textbox>
+          <span style="font-size:16px;text-align:center;">{[(weatherData.dt * 1000) | date : "dd.MM.yyyy - HH:mm:ss"]}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div animate class="raspi-directive-border" flex ng-if="!hasData">
+    <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+  </div>
+
+</div>

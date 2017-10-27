@@ -1,0 +1,24 @@
+/*.md-button{
+
+}*/
+
+
+/*.md-button:hover {
+  background: #BBDEFB !important;
+  font-size: 14px !important;
+}*/
+
+.c3-axis .tick line {
+  display: none;
+}
+.c3 path {
+  fill: none;
+  /*stroke: #000;*/
+  stroke-width: 2px;
+}
+
+.c3 line{
+  fill: none;
+  stroke: #000;
+  stroke-width: 0.5px;
+}

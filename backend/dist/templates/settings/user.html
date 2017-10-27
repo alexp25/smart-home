@@ -1,0 +1,43 @@
+<div class="raspi-margin md-primary" ng-init="init();" layout="column">
+  <div layout-gt-md="row" layout="column" layout-align="space-between center" layout-align-gt-md="space-between start">
+
+    <!--ng-submit    placeholder-->
+    <div layout="column" class="raspi-button-holder">
+      <!-- <md-button md-no-ink class="md-primary" type="submit" ng-click="updateUserInfo();">Update Info</md-button> -->
+      <md-button md-no-ink class="md-primary" ng-click="updateUserInfo();">Update Info</md-button>
+    </div>
+    <!-- <form flex ng-submit="updateUserInfo();" name="updateForm" layout="column"> -->
+    <div layout="column" flex>
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">User name</span>
+        <input class="md-primary raspi-numeric-input-m" name="username" ng-model="userInfo.username" required type="text">
+      </md-input-container>
+
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Email</span>
+        <input class="md-primary raspi-numeric-input-m" name="username" ng-model="userInfo.email" required type="email">
+      </md-input-container>
+
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Password</span>
+        <input class="md-primary raspi-numeric-input-m" name="password" ng-model="userInfo.password" required type="password">
+      </md-input-container>
+
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">New password</span>
+        <input class="md-primary raspi-numeric-input-m" name="NewPassword" ng-model="userInfo.newPassword" required type="password">
+      </md-input-container>
+
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Confirm password</span>
+        <input class="md-primary raspi-numeric-input-m" name="confirmPassword" ng-model="userInfo.confirmPassword" required type="password">
+      </md-input-container>
+
+      <!-- </form> -->
+    </div>
+  </div>
+  <div animate class="raspi-directive-border" flex ng-if="!hasData">
+    <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+  </div>
+
+</div>

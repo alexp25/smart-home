@@ -1,0 +1,56 @@
+<div ng-init="init();">
+  <div flex style="width:100%" id="player" ng-if="mjpegStream">
+    <div class="img-holder" ng-class="{'fullscreen':isFullscreen===true,'raspi-padding':isFullscreen===false}" ng-if="enableStream && stream.url!==undefined">
+      <div ng-if="isFullscreen===true">
+        <mjpeg maxwidth="0" url="stream.url"></mjpeg>
+        <div class="img-toolbar" layout-align="start start" layout="row">
+          <button aria-label="play" class="raspi-icon-button" ng-click="toggleStream();">
+            <i class="{[playIcon]}"></i>
+          </button>
+          <button aria-label="fullscreen" class="raspi-icon-button" ng-click="toggleFullscreen();">
+            <i class="fa fa-arrows-alt"></i>
+          </button>
+        </div>
+      </div>
+      <div ng-if="isFullscreen===false">
+        <!-- Warning: MJPEG Streaming can only be stopped by refreshing the webpage. TODO: websocket implementation. -->
+        <mjpeg maxwidth="640" url="stream.url"></mjpeg>
+        <div layout-align="start start" layout="row">
+          <button aria-label="play" class="raspi-icon-button" ng-click="toggleStream();">
+            <i class="{[playIcon]}"></i>
+          </button>
+          <button aria-label="fullscreen" class="raspi-icon-button" ng-click="toggleFullscreen();">
+            <i class="fa fa-arrows-alt"></i>
+          </button>
+        </div>
+
+        <md-radio-group class="md-primary" ng-model="stream.url" ng-change="refreshStream();">
+          <md-radio-button ng-repeat="d in stream.routes" class="raspi-label-s" ng-value="d.url">
+            {[d.name]}
+          </md-radio-button>
+        </md-radio-group>
+      </div>
+    </div>
+
+    <div class="raspi-margin" ng-if="!enableStream || stream.url===undefined">
+      <div class="img-toolbar raspi-bg" layout-align="start start" layout="row">
+        <button aria-label="play" class="raspi-icon-button" ng-click="toggleStream();">
+          <i class="{[playIcon]}"></i>
+        </button>
+        <button aria-label="fullscreen" class="raspi-icon-button" ng-click="toggleFullscreen();">
+          <i class="fa fa-arrows-alt"></i>
+        </button>
+      </div>
+
+      <md-radio-group class="md-primary" ng-model="stream.url" ng-change="refreshStream();">
+        <md-radio-button ng-repeat="d in stream.routes" class="raspi-label-s" ng-value="d.url">
+          {[d.name]}
+        </md-radio-button>
+      </md-radio-group>
+    </div>
+  </div>
+
+  <div ng-if="!mjpegStream" class="raspi-padding">
+    MJPEG Streaming is not available in this version
+  </div>
+</div>

@@ -1,0 +1,140 @@
+.main-menu-btn {
+  border-radius: 0;
+  cursor: pointer;
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  padding: 0px 16px;
+  text-align: left;
+  text-decoration: none;
+  white-space: normal;
+  width: 100%;
+  font-weight: bold;
+}
+.sub-menu-btn {
+  display: block;
+  /*padding: 5px;*/
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 10px;
+  margin-left: 10px;
+  overflow: hidden;
+  /*text-transform: none;*/
+  text-rendering: optimizeLegibility;
+  /*font-weight: 500;*/
+  width: 100%;
+  /*pointer-events:none;*/
+}
+.sub-menu-btn:hover {
+  /*background: #BBDEFB !important;*/
+  /*background: white !important;*/
+  /*font-size: 14px !important;*/
+}
+.sub-menu-btn:focus {
+  background: white !important;
+}
+.raspi-menu-btn-selected {
+  /*color: white;*/
+  font-weight: bold;
+  /*background-color: #BBDEFB;*/
+  background-color: #D3D3D3;
+}
+.raspi-sidenav {
+  border-top: 0px;
+  /*border-bottom: 3px solid rgba(0, 0, 255, 0.2);*/
+  /*border-right: 3px solid rgba(0, 100, 255, 0.2);*/
+  border-left: 0px;
+}
+.box {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+html, body {
+  overflow-y: auto;
+  font-family: 'Roboto';
+  font-style: normal;
+  height: 100%;
+}
+.view {
+  height: 100%;
+  width: 100%;
+}
+.view-50 {
+  height: 50%;
+  width: 100%;
+}
+.view-90 {
+  height: 90%;
+  /*width: 100%;*/
+}
+.view-parent {
+  display: flex;
+  /*width: 100%;*/
+  /*flex-direction: column;*/
+}
+.view-container {
+  /*padding: 0;*/
+  /*margin: 0;*/
+  /*width: 100%;*/
+  height: 100%;
+}
+.view-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/*his is a frustrating issue that's dealt with designers all the time.
+The trick is that you need to set the height to 100% on BODY and HTML in your CSS.
+
+html,body {
+    height:100%;
+}
+This seemingly pointless code is to define to the browser what 100% means. Frustrating, yes, but is the simplest way.*/
+
+
+/* Let's get this party started */
+
+
+/*::-webkit-scrollbar {
+  width: 12px;
+}*/
+
+
+/* Track */
+
+
+/*::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}*/
+
+
+/* Handle */
+
+
+/*::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(255, 0, 0, 0.8);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(255, 0, 0, 0.4);
+}*/
+
+::-webkit-scrollbar {
+  /*width: 1em;*/
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  /*-webkit-border-radius: 10px;
+  border-radius: 10px;*/
+}
+::-webkit-scrollbar-thumb {
+  /*-webkit-border-radius: 10px;*/
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}

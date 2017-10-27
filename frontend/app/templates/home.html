@@ -1,0 +1,29 @@
+<div id="home-content" layout="column" layout-align="center center" ng-init="init();">
+
+  <!-- <div layout-align="center center" layout="column" >
+    <md-progress-linear class="md-accent" md-mode="indeterminate"></md-progress-linear>
+    <div>
+      <div uib-carousel active="active" interval="5000" no-wrap="false">
+        <div uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id">
+          <img ng-src="{[slide.image]}" style="margin:auto;width:800px;">
+          <div class="carousel-caption"></div>
+        </div>
+      </div>
+    </div>
+    <md-progress-linear class="md-accent" md-mode="indeterminate"></md-progress-linear>
+  </div> -->
+
+  <h4 class="raspi-h4">Alex Smart Home</h4>
+
+  <div flex ng-controller="logoutCtrl" ng-if="authenticated">
+    <md-button class="md-primary" ng-click="logout()">Log out</md-button>
+  </div>
+  <div flex ng-if="!authenticated">
+    <md-button class="md-primary" ng-click="login()">Log in</md-button>
+  </div>
+
+  <div>
+    Raspberry Pi Home Automation Web App. &copy; Alex 2016.
+  </div>
+
+</div>

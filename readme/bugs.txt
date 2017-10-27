@@ -1,0 +1,2 @@
+websockets do not work cross domain
+socket io is required for that

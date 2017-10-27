@@ -1,0 +1,4 @@
+sudo apt-get install ffmpeg x264 libx264-dev
+
+ffmpeg:
+sudo apt-get install libav-tools

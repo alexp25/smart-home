@@ -1,0 +1,47 @@
+<div class="raspi-margin md-primary" ng-init="init();" layout="column">
+  <!-- <h4 class="raspi-h4">
+    Node settings
+  </h4> -->
+
+  <div layout-gt-md="row" layout="column" ng-repeat="rows in chunkedNodes">
+    <div ng-repeat="node in rows track by $index" flex layout="column" layout-align="space-between center">
+      <div layout="column">
+        <raspi-textbox align="center" text="'Sensor '+node.s_id"></raspi-textbox>
+        <div class="raspi-frame md-primary" layout="column">
+          <div class="raspi-widget-holder-s" layout="column">
+            <!-- <md-input-container class="input-container">
+              <span class="raspi-label-s">Sensor id</span>
+              <input class="raspi-numeric-input-s md-primary" min="-1" ng-model="node.s_id" type="number"></input>
+            </md-input-container> -->
+            <md-input-container class="input-container">
+              <span class="raspi-label-s">Sensor type</span>
+              <!-- <select class="raspi-numeric-input-s md-primary" ng-model="node.s_type">
+                <option ng-repeat="element in nodeDef.SensorType" value="{[element]}">{[element]}</option>
+              </select> -->
+              <input class="raspi-numeric-input-s md-primary" min="-1" ng-model="node.s_type" type="number"></input>
+            </md-input-container>
+            <md-input-container class="input-container">
+              <span class="raspi-label-s">Details</span>
+              <textarea name="textarea" class="md-primary" ng-model="node.info" style="height:250px;"></textarea>
+            </md-input-container>
+          </div>
+          <div style="margin-top:5px;" layout="column">
+            <md-button md-no-ink class="md-primary" ng-click="saveNode(node);">Update</md-button>
+            <md-button md-no-ink class="md-primary" ng-click="removeNode(node)">Remove</md-button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div animate class="raspi-directive-border" flex ng-if="!hasData">
+    <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+  </div>
+
+  <!-- <div layout="column">
+    <md-button md-no-ink class="md-primary" ng-click="getNodes();">Reload</md-button>
+    <md-button md-no-ink class="md-primary" ng-click="addNode();">New</md-button>
+  </div> -->
+
+</div>

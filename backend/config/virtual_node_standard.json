@@ -1,0 +1,12 @@
+{
+  "input_node": 10,
+  "output_node": 20,
+  "input_channel": 11,
+  "output_channel": 21,
+  "input": 2,
+  "output": 3,
+  "thd1": 4,
+  "thd2": 5,
+  "inverted": 102,
+  "enabled": 101
+}

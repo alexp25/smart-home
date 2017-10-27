@@ -1,0 +1,51 @@
+<div class="raspi-margin md-primary" layout="column" ng-init="init();">
+  <!-- <div layout-align="space-between center" layout-gt-md="row" layout="column" style="margin-top:10px;"> -->
+
+    <div flex layout="column">
+      <md-radio-group class="md-primary" ng-change="updateCmdString('mode'); sendData(cmdString,'0');" ng-model="jsondata.mode">
+        <md-radio-button class="raspi-label-s" ng-repeat="d in settings.mode" ng-value="d.value">
+          {[d.label]}
+        </md-radio-button>
+      </md-radio-group>
+    </div>
+
+    <div flex layout="column" ng-if="jsondata.mode===0" style="width:100%;">
+      <md-button class="md-primary" md-no-ink ng-click="sendData('CMD_START_PROGRAM','0');">
+        Start
+      </md-button>
+      <md-button class="md-primary" md-no-ink ng-click="sendData('CMD_STOP_PROGRAM','0');">
+        Stop
+      </md-button>
+      <md-button class="md-primary" md-no-ink ng-click="sendData('CMD_NEXT_PLANT','0');">
+        Next
+      </md-button>
+    </div>
+
+    <div flex layout="column" ng-if="jsondata.mode===1" style="width:100%;">
+      <span class="raspi-label-s">Carriage</span>
+      <rzslider flex rz-slider-model="jsonOut.carriageCmd" rz-slider-options="hSlider1.options" style="max-width:300px;"></rzslider>
+      <span class="raspi-label-s">Pump</span>
+      <rzslider flex rz-slider-model="jsonOut.pumpCmd" rz-slider-options="hSlider2.options" style="max-width:300px;"></rzslider>
+    </div>
+
+    <div flex layout="column" ng-if="jsondata.mode===2" style="width:100%;">
+      <!-- <md-slider aria-label="red" flex id="track-slider-dest" max="{[settings.trackLen]}" min="0" ng-disabled="false" ng-model="jsonOut.carriageDest"></md-slider> -->
+      <rzslider rz-slider-model="jsonOut.carriageDest" rz-slider-options="{id: 2, floor: 0, ceil: settings.trackLen};" style="max-width:300px;"></rzslider>
+
+      <!-- <input class="raspi-numeric-input-s md-primary" id="CMD_SET_REF_CARR" ng-keydown="keyPress($event);" ng-model="jsonOut.carriageDest" type="number"></input> -->
+    </div>
+    <div flex layout="column" ng-if="jsondata.mode===2" style="width:100%;">
+      <md-button aria-label="submit carriage destination" class="md-primary" md-no-ink ng-click="sendData('CMD_SET_REF_CARR',jsonOut.carriageDest.toString());">
+        Start
+      </md-button>
+      <md-button class="md-primary" md-no-ink ng-click="sendData('CMD_MOVE_NEXT','0');">
+        Next
+      </md-button>
+      <md-button class="md-primary" md-no-ink ng-click="sendData('CMD_CARR_RET','0');">
+        Return
+      </md-button>
+    </div>
+
+  <!-- </div> -->
+
+</div>

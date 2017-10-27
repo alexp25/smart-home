@@ -1,0 +1,49 @@
+<div layout="column" class="raspi-margin md-primary" ng-init="init();">
+
+  <div layout-gt-md="row" layout="column" layout-align="space-between center" layout-align-gt-md="space-between start">
+    <div layout="column" class="raspi-button-holder">
+      <md-button md-no-ink class="md-primary" ng-click="syncTime();">Sync time</md-button>
+      <md-button md-no-ink class="md-primary" ng-click="sendData('CMD_SET_COUNTD_UPD',settings.nextSq.h.toString() + ',' + settings.nextSq.m.toString() + ',' + '0');">Set watering time</md-button>
+      <!-- <md-button md-no-ink class="md-primary" ng-click="updateSettings();">Update settings</md-button> -->
+    </div>
+    <div layout="column" class="raspi-widget-holder-s">
+      <span class="raspi-label-m" style="text-align:center;">Carriage controller</span>
+
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">
+          Max pump command</span>
+        <input aria-label="input" max="255" min="0" ng-model="wsSettings.maxpump" type="number"></input>
+      </md-input-container>
+
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Kp</span>
+        <input aria-label="input" class="raspi-numeric-input-s md-primary" max="15" min="-15" ng-model="wsSettings.Kp" type="number"></input>
+      </md-input-container>
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Ki</span>
+        <input aria-label="input" class="raspi-numeric-input-s md-primary" max="15" min="-15" ng-model="wsSettings.Ki" type="number"></input>
+      </md-input-container>
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Kd</span>
+        <input aria-label="input" class="raspi-numeric-input-s md-primary" max="15" min="-15" ng-model="wsSettings.Kd" type="number"></input>
+      </md-input-container>
+
+
+      <span class="raspi-label-m" style="text-align:center;">Irrigation settings</span>
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Program time (h)</span>
+        <input aria-label="input" class="raspi-numeric-input-s md-primary" max="24" min="0" ng-model="settings.nextSq.h" type="number"></input>
+      </md-input-container>
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Program time (m)</span>
+        <input aria-label="input" class="raspi-numeric-input-s md-primary" max="59" min="0" ng-model="settings.nextSq.m" type="number"></input>
+      </md-input-container>
+
+    </div>
+  </div>
+
+  <div animate class="raspi-directive-border" flex ng-if="!hasData">
+    <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+  </div>
+
+</div>

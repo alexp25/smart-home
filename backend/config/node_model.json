@@ -1,0 +1,551 @@
+[{
+    "id": 0,
+    "class": "sensor",
+    "type": "test",
+    "model": 1,
+    "configuration": {
+      "communication": {
+        "polling": 0.5
+      },
+      "metadata": [{
+          "id": 1,
+          "pos":1,
+          "type": "data1",
+          "unit": "unit1",
+          "multiplier": 1,
+          "minValue": 0,
+          "maxValue": 100,
+          "log": 60,
+		  "value":0
+        },
+        {
+          "id": 2,
+          "pos":2,
+          "type": "data2",
+          "unit": "",
+          "multiplier": 10,
+          "minValue": 0,
+          "maxValue": 1000,
+          "log": 60,
+		  "value":0
+        }
+      ],
+      "commands": [{
+          "name": "cmd value",
+          "type": "value",
+          "code": 1,
+          "minValue": 0
+        }, {
+          "name": "cmd slider",
+          "type": "slider",
+          "code": 2,
+          "minValue": 0,
+          "maxValue": 100
+        },
+        {
+          "name": "cmd button",
+          "type": "cmd",
+          "code": 10
+        }
+      ]
+    }
+  }, {
+    "id": 1,
+    "class": "sensor",
+    "type": "soil",
+    "model": 1,
+    "configuration": {
+      "communication": {
+        "polling": 2
+      },
+      "metadata": [{
+          "id": 1,
+          "pos":1,
+          "type": "humidity",
+          "unit": "",
+          "multiplier": 1,
+          "minValue": 300,
+          "maxValue": 600,
+          "log": 60
+        },
+        {
+          "id": 2,
+          "pos":2,
+          "type": "temperature",
+          "unit": "C",
+          "multiplier": 10,
+          "minValue": 0,
+          "maxValue": 500,
+          "log": 60
+        }, {
+          "id": 3,
+          "pos":3,
+          "type": "light",
+          "unit": "",
+          "multiplier": 1,
+          "minValue": 0,
+          "maxValue": 100,
+          "log": 60
+        }
+      ],
+      "commands": [{
+          "name": "id",
+          "type": "value",
+          "code": 34,
+          "minValue": 0
+        },
+        {
+          "name": "save",
+          "type": "cmd",
+          "code": 32
+        }
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "class": "sensor",
+    "type": "air",
+    "model": 1,
+    "configuration": {
+      "communication": {
+        "polling": 0.5
+      },
+      "metadata": [{
+          "id": 1,
+          "pos":1,
+          "type": "temperature",
+          "unit": "C",
+          "multiplier": 10,
+          "minValue": -100,
+          "maxValue": 1000,
+          "log": 60
+        },
+        {
+          "id": 2,
+          "pos":2,
+          "type": "smoke",
+          "unit": "",
+          "multiplier": 1,
+          "minValue": 0,
+          "maxValue": 4095,
+          "log": 60
+        }
+      ],
+      "commands": [{
+          "name": "id",
+          "type": "value",
+          "code": 34,
+          "minValue": 0
+        },
+        {
+          "name": "save",
+          "type": "cmd",
+          "code": 32
+        }
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "class": "sensor",
+    "type": "air_gas",
+    "model": 1,
+    "configuration": {
+      "communication": {
+        "polling": 0.5
+      },
+      "metadata": [{
+          "id": 1,
+          "pos":1,
+          "type": "gas concentration",
+          "unit": "",
+          "multiplier": 1,
+          "minValue": 0,
+          "maxValue": 100,
+          "log": 60
+        }
+      ],
+      "commands": [{
+          "name": "id",
+          "type": "value",
+          "code": 34,
+          "minValue": 0
+        },
+        {
+          "name": "save",
+          "type": "cmd",
+          "code": 32
+        }
+      ]
+    }
+  },
+  
+  {
+    "id": 4,
+    "class": "sensor",
+    "type": "air",
+    "model": 1,
+    "configuration": {
+      "communication": {
+        "polling": 0.5
+      },
+      "metadata": [{
+          "id": 1,
+          "pos":1,
+          "type": "temperature",
+          "unit": "C",
+          "multiplier": 10,
+          "minValue": -100,
+          "maxValue": 1000,
+          "log": 60
+        },
+        {
+          "id": 2,
+          "pos":2,
+          "type": "humidity",
+          "unit": "",
+          "multiplier": 10,
+          "minValue": 0,
+          "maxValue": 1000,
+          "log": 60
+        }
+      ],
+      "commands": [{
+          "name": "id",
+          "type": "value",
+          "code": 34,
+          "minValue": 0
+        },
+        {
+          "name": "save",
+          "type": "cmd",
+          "code": 32
+        }
+      ]
+    }
+  },
+  
+  {
+    "id": 5,
+    "class": "sensor",
+    "type": "air_pressure",
+    "model": 1,
+    "configuration": {
+      "communication": {
+        "polling": 0.5
+      },
+      "metadata": [{
+          "id": 1,
+          "pos":1,
+          "type": "pressure",
+          "unit": "hPa",
+          "multiplier": 1,
+          "minValue": 900,
+          "maxValue": 1100,
+          "log": 60
+        },
+        {
+          "id": 2,
+          "pos":2,
+          "type": "height",
+          "unit": "m",
+          "multiplier": 1,
+          "log": 60
+        },
+		{
+          "id": 3,
+          "pos":3,
+          "type": "temperature",
+          "unit": "C",
+          "multiplier": 10,
+		  "minValue": -100,
+          "maxValue": 1000,
+          "log": 60
+        }
+      ],
+      "commands": [{
+          "name": "id",
+          "type": "value",
+          "code": 34,
+          "minValue": 0
+        },
+        {
+          "name": "save",
+          "type": "cmd",
+          "code": 32
+        }
+      ]
+    }
+  },
+
+   {
+    "id": 6,
+    "class": "sensor",
+    "type": "alarm",
+    "model": 1,
+    "configuration": {
+      "communication": {
+        "polling": 0.5
+      },
+      "metadata": [{
+          "id": 1,
+          "pos":1,
+          "type": "alarm",
+          "unit": "",
+          "multiplier": 1,
+          "minValue": 0,
+          "maxValue": 1,
+          "log": 0
+        },
+        {
+          "id": 2,
+          "pos":2,
+          "type": "rssi",
+          "unit": "",
+          "multiplier": 1,
+          "log": 0
+        },
+        {
+          "id": 3,
+          "pos":3,
+          "type": "connection quality",
+          "unit": "%",
+          "multiplier": 1,
+          "minValue": 0,
+          "maxValue": 100,
+          "log": 0
+        }
+      ],
+      "commands": [{
+          "name": "id",
+          "type": "value",
+          "code": 34,
+          "minValue": 0
+        },
+        {
+          "name": "save",
+          "type": "cmd",
+          "code": 32
+        }
+      ]
+    }
+  },
+  
+  {
+    "id": 101,
+    "class": "actuator",
+    "type": "heater",
+    "model": 1,
+    "configuration": {
+      "communication": {
+        "polling": 0.5
+      },
+      "metadata": [{
+        "id": 1,
+        "pos":1,
+        "type": "output",
+        "unit": "",
+        "multiplier": 1,
+        "minValue": 0,
+        "maxValue": 100
+      }],
+      "commands": [{
+          "name": "id",
+          "type": "value",
+          "code": 34,
+          "minValue": 0
+        },
+        {
+          "name": "output",
+          "type": "slider",
+          "code": 1,
+          "minValue": 0,
+          "maxValue": 100
+        },
+        {
+          "name": "save",
+          "type": "cmd",
+          "code": 32
+        }
+      ]
+    }
+  },
+  {
+    "id": 102,
+    "class": "actuator",
+    "type": "beat_lights",
+    "model": 1,
+    "configuration": {
+      "communication": {
+        "polling": 0.5
+      },
+      "metadata": [{
+          "pos": 1,
+          "id":13,
+          "type": "hue",
+          "unit": "",
+          "multiplier": 1
+        },
+        {
+          "pos": 2,
+          "id":12,
+          "type": "saturation",
+          "unit": "",
+          "multiplier": 1
+        },
+        {
+          "pos": 3,
+          "id":11,
+          "type": "brightness",
+          "unit": "",
+          "multiplier": 1
+        },
+        {
+          "pos": 4,
+          "id":41,
+          "type": "special fx",
+          "unit": "",
+          "multiplier": 1,
+		  "visible": false
+        }
+      ],
+      "commands": [{
+          "name": "update spectrum",
+          "type": "value",
+          "code": 1
+        }, {
+          "name": "id",
+          "type": "value",
+          "code": 34,
+          "minValue": 0
+        },
+        {
+          "name": "brightness",
+          "type": "slider",
+          "code": 11,
+          "minValue": 0,
+          "maxValue": 100
+        },
+        {
+          "name": "saturation",
+          "type": "slider",
+          "code": 12,
+          "minValue": 0,
+          "maxValue": 100
+        },
+        {
+          "name": "hue",
+          "type": "slider",
+          "code": 13,
+          "minValue": 0,
+          "maxValue": 100
+        },
+        {
+          "name": "fx",
+          "type": "slider",
+          "code": 41,
+          "minValue": 0,
+          "maxValue": 10
+        },
+        {
+          "name": "reset",
+          "type": "cmd",
+          "code": 15
+        },
+        {
+          "name": "sound mode",
+          "type": "cmd",
+          "code": 16
+        },
+        {
+          "name": "full spectrum hue",
+          "type": "cmd",
+          "code": 31
+        },
+        {
+          "name": "next fx",
+          "type": "cmd",
+          "code": 42
+        },
+        {
+          "name": "save",
+          "type": "cmd",
+          "code": 43
+        }
+      ]
+    }
+  },
+  {
+    "id": 50,
+    "class": "actuator",
+    "type": "relay",
+    "model": 1,
+    "configuration": {
+      "communication": {
+        "polling": 0.5
+      },
+      "metadata": [{
+        "pos": 1,
+        "id":51,
+        "type": "relay",
+        "unit": "",
+        "multiplier": 1,
+        "minValue": 0,
+        "maxValue": 1,
+		"visible": false
+      }],
+      "commands": [{
+        "name": "id",
+        "type": "value",
+        "code": 34,
+        "minValue": 0
+      }, {
+        "name": "toggle",
+        "type": "cmd",
+        "code": 50
+      }, {
+        "name": "switch",
+        "type": "slider",
+        "code": 51,
+        "minValue": 0,
+        "maxValue": 1
+      }, {
+        "name": "save",
+        "type": "cmd",
+        "code": 32
+      }]
+    }
+  },
+  {
+    "id": 201,
+    "class": "actuator",
+    "type": "watering_system",
+    "model": 1,
+    "configuration": {
+      "communication": {
+        "polling": 0.2
+      },
+      "metadata": [{
+        "pos": 16,
+        "id":1,
+        "type": "light level",
+        "unit": "",
+        "multiplier": 1
+      }],
+      "commands": [{
+          "name": "id",
+          "type": "value",
+          "code": 34,
+          "minValue": 0
+        },
+        {
+          "name": "save",
+          "type": "cmd",
+          "code": 32
+        }
+      ]
+    }
+  }
+
+]

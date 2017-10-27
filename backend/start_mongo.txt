@@ -1,0 +1,5 @@
+@ECHO OFF
+CD "C:\Program Files\MongoDB\Server\3.4\bin"
+START mongod --dbpath "c:\mongodb_data"
+START mongo
+EXIT /B 0

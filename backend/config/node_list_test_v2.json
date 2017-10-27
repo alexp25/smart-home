@@ -1,0 +1,42 @@
+[{
+    "id": 2300,
+    "type":0,
+    "ip": "192.168.25.11",
+    "data": [1, 400, 252, 50],
+    "sdata": [{
+      "id": 2,
+      "type": "data1",
+	  "pos": 1,
+      "unit": "",
+      "multiplier": 1,
+      "value": 0
+    },{
+      "id": 3,
+      "type": "data2",
+      "unit": "",
+	  "pos": 2,
+      "multiplier": 1,
+      "value": 10
+    }],
+    "commands": [{
+      "name": "change data1",
+      "type": "slider",
+      "minValue": 0,
+	  "maxValue":100,
+      "code": 2,
+	  "value":0
+    },
+	{
+      "name": "change data2",
+      "type": "slider",
+      "minValue": 0,
+	  "maxValue":100,
+      "code": 3,
+	  "value":0
+    }],
+    "info": {
+		"class":"sensor",
+		"type":"test"
+	}
+  }
+]

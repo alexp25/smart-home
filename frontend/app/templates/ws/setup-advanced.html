@@ -1,0 +1,47 @@
+<div layout="column" class="raspi-margin md-primary" ng-init="init();">
+
+  <span class="raspi-label-m" style="text-align:center;">Irrigation controller</span>
+
+  <div layout="column" class="raspi-button-holder">
+    <!-- <md-button md-no-ink class="md-primary" ng-click="getControlSettings();">Reload</md-button> -->
+    <md-button md-no-ink class="md-primary" ng-click="addControlSettingsNode();">Create new controller</md-button>
+    <md-button md-no-ink class="md-primary" ng-click="updateSettings();">Update settings</md-button>
+  </div>
+  <div layout="column">
+
+    <div layout-gt-md="row" layout="column" layout-align="space-between center" layout-align-gt-md="space-between start" ng-repeat="rows in chunkedNodes">
+      <div ng-repeat="node in rows track by $index" flex layout="column" layout-align="space-between center">
+        <div layout="column" class="raspi-widget-holder-s">
+
+          <raspi-textbox align="center" text="'Sensor '+node.sensorId"></raspi-textbox>
+
+          <div ng-if="settingsModel!==undefined" ng-repeat="s in settingsModel track by $index">
+
+            <md-input-container class="input-container">
+              <span ng-if="s.type!=='check'" class="raspi-label-s">{[s.caption]}
+              </span>
+              <input aria-label="input" ng-if="s.type==='text'" class="raspi-numeric-input-m md-primary" ng-model="node[s.name]" type="text"></input>
+              <input aria-label="input" ng-if="s.type==='numeric'" class="raspi-numeric-input-m md-primary" ng-model="node[s.name]" type="number"></input>
+
+              <md-checkbox aria-label="checkbox" ng-if="s.type==='check'" aria-label="cb" ng-model="node[s.name]">
+                <span class="raspi-label-s">{[s.caption]}
+                </span>
+              </md-checkbox>
+            </md-input-container>
+
+          </div>
+          <div style="margin-top:5px;" layout="column">
+            <md-button md-no-ink class="md-primary" ng-click="saveNode(node);">Save</md-button>
+            <md-button md-no-ink class="md-primary" ng-click="removeNode(node)">Remove</md-button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div animate class="raspi-directive-border" flex ng-if="!hasData">
+    <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+  </div>
+
+</div>

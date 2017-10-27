@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- <base href="/dev/"></base> -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <title>Smart Home</title>
+
+  <base href="/"></base>
+  <link rel="icon" type="image/png" href="img/icon.png">
+  <link rel="stylesheet" href="css/app.css">
+
+  <!-- <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <script src="lib/ionic/js/ionic.bundle.js"></script> -->
+
+
+
+
+  <!-- main frameworks -->
+
+  <script src="libs/jquery/dist/jquery.js"></script>
+  <script src="libs/ionic/js/ionic.bundle.js"></script>
+  <!-- <script src="libs/angular/angular.js"></script> -->
+
+  <!-- cordova script (this will be a 404 during development) -->
+  <script src="cordova.js"></script>
+
+
+  <!-- other scripts -->
+  <script src="libs/flowchart/flowchart/svg_class.js" type="text/javascript"></script>
+  <script src="libs/flowchart/flowchart/mouse_capture_service.js" type="text/javascript"></script>
+  <script src="libs/flowchart/flowchart/dragging_service.js" type="text/javascript"></script>
+  <script src="libs/flowchart/flowchart/flowchart_viewmodel.js" type="text/javascript"></script>
+  <script src="libs/flowchart/flowchart/flowchart_directive.js" type="text/javascript"></script>
+
+
+  <!-- modules and bower components -->
+  <script src="js/app.js"></script>
+
+
+
+
+</head>
+
+<body ng-app="app" ng-controller="navigationCtrl" ng-init="init();" class="md-primary view-container">
+
+  <!--<header ui-view="header"></header>
+	<div layout="column">
+		<div ui-view="navigation" flex></div>
+		<div ui-view="content" class="raspi-page"></div>
+	</div>-->
+  <!-- <header>
+			<md-toolbar>
+
+	</md-toolbar>
+	</header> -->
+  <md-content class="md-primary view-container">
+    <ion-pane class="md-primary view-container">
+      <!-- hide-gt-md ng-if="navstyle===2"  -->
+      <!-- ng-if="(!sidenavVisible)" -->
+      <!-- ng-if="(!sidenavVisible) && (!$mdMedia('gt-md'))" -->
+      <ion-header-bar class="bar-dark" ng-if="navstyle===2 && authenticated">
+        <!-- <h1 class="title">Smart Home Mobile</h1> -->
+        <!-- <button class="button button-icon">
+          <i class="icon ion-compose"></i>
+        </button> -->
+        <!-- <md-content> -->
+        <md-toolbar class="md-primary">
+          <div class="md-toolbar-tools" layout="row">
+            <md-button aria-label="toggle sidenav" md-no-ink ng-click="toggleSidenav();" class="md-icon-button">
+              <i class="fa fa-bars"></i>
+            </md-button>
+
+            <div class="raspi-label-s raspi-white raspi-uppercase" flex>{[openPage.name]}</div>
+          </div>
+        </md-toolbar>
+        <!-- </md-content> -->
+      </ion-header-bar>
+      <ion-content ng-if="navstyle===2 && authenticated" layout="row" class="md-primary view-90">
+        <!-- <md-content class="md-primary"> -->
+        <md-sidenav class="md-primary view-scroll raspi-sidenav" md-component-id="left" md-is-locked-open="lockLeft && $mdMedia('gt-md')">
+          <div ng-repeat="section in menuList" layout="column">
+            <md-button md-no-ink class="main-menu-btn md-raised md-primary" ng-click="changeUrlTo(section);">
+              <div layout-align="space-between center" layout="row">
+                <i class="{[section.icon]}"></i>
+                <div flex>{[section.name]}</div>
+                <i class="fa" ng-class="{'fa-angle-right':section.isOpen, 'fa-angle-down':!section.isOpen}" ng-if="!section.url"></i>
+              </div>
+            </md-button>
+            <div ng-if="section.isOpen" ng-repeat="subSection in section.subSections">
+              <md-button md-no-ink class="md-primary sub-menu-btn" ng-class="{'raspi-menu-btn-selected' : isSelected(subSection.url)}" ng-click="changeUrlTo(subSection);">
+                <div layout-align="space-between center" layout="row">
+                  <i class="fa {[subSection.icon]}"></i>
+                  <div flex>{[subSection.name]}</div>
+                </div>
+              </md-button>
+            </div>
+          </div>
+
+          <md-button md-no-ink class="main-menu-btn md-raised md-primary " ng-click="toggleSidenav();">
+            <i class="md-primary fa fa-arrow-left" aria-hidden="true"></i>
+          </md-button>
+
+        </md-sidenav>
+        <!-- </md-content> -->
+
+        <!-- <div flex>
+            <div ui-view="content"></div>
+          </div> -->
+        <div class="md-primary view-scroll" flex ui-view="content"></div>
+        <!-- <div class="view-container" ui-view="content"></div> -->
+
+      </ion-content>
+      <ion-content ng-if="navstyle===1 && authenticated" layout="column" class="md-primary view-container view-scroll">
+        <md-tabs class="md-primary" id="tab-lvl1" md-autoselect="false" md-border-bottom md-center-tabs="false" md-dynamic-height md-selected="tabSelection.lvl1">
+          <md-tab ng-repeat="section in menuList">
+            <md-tab-label>{[section.name]}
+              <i class="{[section.icon]}"></i>
+            </md-tab-label>
+          </md-tab>
+        </md-tabs>
+        <div ng-if="!menuList[tabSelection.lvl1].url && menuList[tabSelection.lvl1].hasOwnProperty('subSections')">
+          <md-tabs id="tab-lvl2" class="md-accent" md-autoselect="false" md-border-bottom md-center-tabs="false" md-dynamic-height md-selected="tabSelection.lvl2">
+            <md-tab ng-disabled="!authenticated" ng-repeat="subSection in menuList[tabSelection.lvl1].subSections">
+              <md-tab-label>{[subSection.name]}
+                <i class="{[subSection.icon]}"></i>
+                <i ng-class="{'fa fa-lock':!authenticated}"></i>
+              </md-tab-label>
+            </md-tab>
+          </md-tabs>
+        </div>
+
+        <!-- <md-content class="md-primary" layout="column" flex> -->
+
+        <!-- <div class="md-primary view-scroll" flex>
+            <div ui-view="content"></div>
+          </div> -->
+        <!-- id="div_to_occupy_the_rest" -->
+        <div class="md-primary view-scroll" flex ui-view="content"></div>
+
+      </ion-content>
+
+
+      <ion-content ng-if="!authenticated">
+        <div ui-view="content"></div>
+      </ion-content>
+
+    </ion-pane>
+
+  </md-content>
+</body>
+
+</html>

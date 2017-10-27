@@ -1,0 +1,43 @@
+<div class="raspi-margin md-primary" ng-init="init();" layout="column">
+  <div layout-gt-md="row" layout="column" layout-align="space-between center" layout-align-gt-md="space-between start">
+    <div layout="column" class="raspi-button-holder">
+      <md-button md-no-ink aria-hidden="true" class="md-primary " ng-click="init();">
+        <!--<i class="fa fa-check-square-o fa-2x"></i>-->
+        Refresh
+      </md-button>
+      <md-button md-no-ink aria-hidden="true" class="md-primary " ng-click="deleteOlderThan(user.deleteOlderThan)">
+        <!--<i class="fa fa-check-square-o fa-2x"></i>-->
+        Delete old sensor data
+      </md-button>
+      <md-button md-no-ink aria-hidden="true" class="md-primary " ng-click="deleteUser(selectedUser.username);getUserNames();">
+        <!--<i class="fa fa-check-square-o fa-2x"></i>-->
+        Delete User
+      </md-button>
+      <!-- <md-button md-no-ink aria-hidden="true" class="md-primary " ng-click="deleteInactiveUsers();getUserNames();">
+      Delete Inactive Users
+    </md-button> -->
+    </div>
+
+    <div flex layout="column">
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Days</span>
+        <input class="md-primary raspi-numeric-input-m" ng-model="user.deleteOlderThan" type="number"></input>
+      </md-input-container>
+      <md-input-container class="input-container">
+        <span class="raspi-label-s">Registered users</span>
+        <md-input-container class="input-container">
+          <md-select ng-model="selectedUser">
+            <md-option ng-repeat="u in users track by $index" ng-value="u">
+              {[u.username]}
+            </md-option>
+          </md-select>
+        </md-input-container>
+      </md-input-container>
+    </div>
+
+  </div>
+  <div animate class="raspi-directive-border" flex ng-if="!hasData">
+    <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+  </div>
+
+</div>
