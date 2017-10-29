@@ -34,7 +34,8 @@ module.exports = function(lineman) {
     jshint: {
       options: {
         newcap: false,
-        reporterOutput: ""
+        reporterOutput: "",
+        latedef: false
       }
     },
 

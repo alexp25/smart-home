@@ -7,7 +7,7 @@ angular.module('app').config(['$interpolateProvider', '$stateProvider', '$urlRou
     $httpProvider.defaults.withCredentials = true;
 
     // $locationProvider.html5Mode(true);
-
+ 
 
     $mdThemingProvider.theme('default')
       .primaryPalette('blue-grey', {

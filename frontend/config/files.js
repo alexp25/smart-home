@@ -11,12 +11,12 @@ module.exports = function(lineman) {
 
     js: {
       vendor: [
-        // 'vendor/bower_components/jquery/dist/jquery.js',
+        'vendor/bower_components/jquery/dist/jquery.js',
         //
         // 'vendor/bower_components/ionic/js/ionic.bundle.js',
 
 
-        // 'vendor/bower_components/angular/angular.js',
+        'vendor/bower_components/angular/angular.js',
 
         'vendor/bower_components/angular-bootstrap/ui-bootstrap.js',
         'vendor/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
@@ -107,7 +107,7 @@ module.exports = function(lineman) {
         'vendor/bower_components/font-awesome/css/font-awesome.css',
 
         // "bower_components/bootstrap/dist/css/bootstrap.css"
-        'vendor/bower_components/bootstrap/dist/css/bootstrap.css',
+        // 'vendor/bower_components/bootstrap/dist/css/bootstrap.css',
         'vendor/bower_components/jquery-ui/themes/base/jquery-ui.css',
         'vendor/bower_components/angular-ui-grid/ui-grid.css',
 

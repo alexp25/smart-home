@@ -1,7 +1,7 @@
 angular.module('app').controller('monitorChartCtrl', ['SharedProperties', 'GlobalFcnService', '$scope', '$timeout',
   '$log', '$http', '$mdSidenav',
   function(SharedProperties, GlobalFcnService, $scope, $timeout, $log, $http, $mdSidenav) {
-    $scope.nodes = {};
+    $scope.nodes = [];
     $scope.startDate = new Date();
     $scope.endDate = new Date();
     var zoomLevel = 10;
@@ -185,6 +185,7 @@ angular.module('app').controller('monitorChartCtrl', ['SharedProperties', 'Globa
       }).
       then(function(data) {
         var jsonObj = angular.fromJson(data.data);
+        console.log(jsonObj);
 
         var maxplotlength = 1000;
         if ($scope.settings.maxPlotLength !== undefined) {
@@ -318,6 +319,7 @@ angular.module('app').controller('monitorChartCtrl', ['SharedProperties', 'Globa
         var jsonObj = angular.fromJson(data.data);
         $scope.nodes = jsonObj;
         $scope.selectedNode = $scope.nodes[0];
+        console.log($scope.nodes);
       }).
       catch(function(data) {
         $scope.jsondata = 'error';
