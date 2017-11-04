@@ -37,6 +37,9 @@ def add_checksum(msg):
 
     return msg2
 
+
+appConfig = None
+
 def init():
     global myList
     myList = []

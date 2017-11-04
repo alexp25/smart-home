@@ -1,6 +1,8 @@
 {
 	"rpi": false,
 	"db_file":"Database/mydatabase.db",
+	"storage": ".",
+	"storage1": "/home/pi",
 	"log_file_stdout":"stdout_log.txt",
 	"log_file_tcp_in":"tcp_in_log.txt",
 	"log_file_tcp_out":"tcp_out_log.txt",

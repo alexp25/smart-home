@@ -1424,7 +1424,7 @@ def apiDownloadLog():
 @app.route('/api/download/log-dbg', methods=['GET'])
 def apiDownloadLogDbg():
     if 'user' in session or not appVariables.appConfig['authentication']:
-        filename = appVariables.appConfig["log_file_stdout"]
+        filename = appVariables.appConfig["storage"] + "/" + appVariables.appConfig["log_file_stdout"]
         return send_file(filename,
                          mimetype='text/plain',
                          attachment_filename="log_file_stdout",
@@ -1435,7 +1435,7 @@ def apiDownloadLogDbg():
 @app.route('/api/download/log-tcp-in', methods=['GET'])
 def apiDownloadLogTcpIn():
     if 'user' in session or not appVariables.appConfig['authentication']:
-        filename = appVariables.appConfig["log_file_tcp_in"]
+        filename = appVariables.appConfig["storage"] + "/" + appVariables.appConfig["log_file_tcp_in"]
         return send_file(filename,
                          mimetype='text/plain',
                          attachment_filename="log_file_tcp_in",
@@ -1446,7 +1446,7 @@ def apiDownloadLogTcpIn():
 @app.route('/api/download/log-tcp-out', methods=['GET'])
 def apiDownloadLogTcpOut():
     if 'user' in session or not appVariables.appConfig['authentication']:
-        filename = appVariables.appConfig["log_file_tcp_out"]
+        filename = appVariables.appConfig["storage"] + "/" + appVariables.appConfig["log_file_tcp_out"]
         return send_file(filename,
                          mimetype='text/plain',
                          attachment_filename="log_file_tcp_out",
@@ -1726,7 +1726,7 @@ if __name__ == '__main__':
 
 
 
-    p = Process(target=DatabaseManagerProcess, args=(appVariables.qDatabaseIn,appVariables.qDatabaseOut,appVariables.qDebug1,appVariables.appConfig['db_file']))
+    p = Process(target=DatabaseManagerProcess, args=(appVariables.qDatabaseIn,appVariables.qDatabaseOut,appVariables.qDebug1,appVariables.appConfig["storage"] + "/" + appVariables.appConfig['db_file']))
     p.start()
 
     msg = "[main] " + 'server started'

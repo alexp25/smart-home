@@ -14,6 +14,8 @@ from multiprocessing import Process, Queue
 
 import sys
 
+import appVariables
+
 
 image = False
 snapshot = False
@@ -293,7 +295,7 @@ class CameraThread(threading.Thread):
                 if self.requested_start_recording():
                     self._rec.clear()
                     if fourcc is not None:
-                        video_writer = cv2.VideoWriter("output.avi", fourcc, fps, (self.w, self.h))
+                        video_writer = cv2.VideoWriter(appVariables.appConfig["storage"] + "/" + "video_recording.avi", fourcc, fps, (self.w, self.h))
                         # video_writer = cv2.cv.VideoWriter("output.avi", fourcc, fps, (self.w, self.h))
                         self.flag_recording=True
                     start_time_record = time_crt

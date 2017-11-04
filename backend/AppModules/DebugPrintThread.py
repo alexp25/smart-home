@@ -16,7 +16,7 @@ class DebugPrintThread(Thread):
                 'buf':[],
                 'cnt':0,
                 'first':True,
-                'file':appVariables.appConfig['log_file_tcp_in'],
+                'file':appVariables.appConfig["storage"] + "/" + appVariables.appConfig['log_file_tcp_in'],
                 't1':t0_log,
                 'print':False,
                 'q_forward':None
@@ -26,7 +26,7 @@ class DebugPrintThread(Thread):
                 'buf': [],
                 'cnt': 0,
                 'first': True,
-                'file':appVariables.appConfig['log_file_tcp_out'],
+                'file':appVariables.appConfig["storage"] + "/" + appVariables.appConfig['log_file_tcp_out'],
                 't1':t0_log,
                 'print':False,
                 'q_forward':None
@@ -36,7 +36,7 @@ class DebugPrintThread(Thread):
                 'buf': [],
                 'cnt': 0,
                 'first': True,
-                'file':appVariables.appConfig['log_file_stdout'],
+                'file':appVariables.appConfig["storage"] + "/" + appVariables.appConfig['log_file_stdout'],
                 't1':t0_log,
                 'print':True,
                 'q_forward':appVariables.qDebug2

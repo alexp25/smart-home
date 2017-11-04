@@ -1,16 +1,12 @@
 {
 	"rpi": true,
-	"db_file":"/media/pi/VERBATIM16/Database/mydatabase.db",
-	
-	"log_file_stdout1":"/media/pi/VERBATIM16/Log/stdout_log.txt",
-	"log_file_tcp_in1":"/media/pi/VERBATIM16/Log/tcp_in_log.txt",
-	"log_file_tcp_out1":"/media/pi/VERBATIM16/Log/tcp_out_log.txt",
-	
-	"log_file_stdout":"/home/pi/Log/stdout_log.txt",
-	"log_file_tcp_in":"/home/pi/Log/tcp_in_log.txt",
-	"log_file_tcp_out":"/home/pi/Log/tcp_out_log.txt",
-	"enable_log":false,
-	
+	"storage": "/media/pi/RPI_DATA",
+	"storage1": "/home/pi",
+	"db_file":"Database/mydatabase.db",
+	"log_file_stdout":"Log/stdout_log.txt",
+	"log_file_tcp_in":"Log/tcp_in_log.txt",
+	"log_file_tcp_out":"Log/tcp_out_log.txt",
+	"enable_log":true,
 	"restart_script":"/home/pi/app_restart.sh",
 	"ws_connection":"tcp",
 	"authentication":true,
