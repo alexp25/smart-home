@@ -1,39 +1,49 @@
 <div class="raspi-margin md-primary" layout="column" ng-init="init();">
   <div layout-align-gt-md="space-between center" layout-gt-md="row" layout="column">
 
-    <div flex layout="column">
+    <div ng-if="initialized" flex layout="column">
 
       <!--<div layout-align="space-between center" layout="row" style="width:100%;">
-      <i class="raspi-led" ng-class="{'fa fa-circle-thin fa-2x':jsondata.connection===false,'fa fa-circle fa-2x':jsondata.connection===true}"></i>
-      <raspi-html-box flex html="jsondata.info"></raspi-html-box>
-    </div>-->
+    <i class="raspi-led" ng-class="{'fa fa-circle-thin fa-2x':jsondata.connection===false,'fa fa-circle fa-2x':jsondata.connection===true}"></i>
+    <raspi-html-box flex html="jsondata.info"></raspi-html-box>
+  </div>-->
       <info-list caption="" class="full-width" flex items="infoList"></info-list>
-      <!-- <div layout="row"> -->
-        <c3-gauge cid="2" data="jsondata.pumpCmd" options="{caption:'pump', unit:'dc',height:100,width:200,ymin:-255,ymax:255}"></c3-gauge>
-        <c3-gauge cid="3" data="jsondata.carriageCmd" options="{caption:'carriage',unit:'dc',height:100,width:200,ymin:-255,ymax:255}"></c3-gauge>
-      <!-- </div> -->
+      <div layout="row">
+        <div flex>
+          <c3-gauge cid="2" data="jsondata.pumpCmd" options="{caption:'pump', unit:'dc',height:100,width:200,ymin:-255,ymax:255}"></c3-gauge>
+        </div>
+        <div flex>
+          <c3-gauge cid="3" data="jsondata.carriageCmd" options="{caption:'carriage',unit:'dc',height:100,width:200,ymin:-255,ymax:255}"></c3-gauge>
+        </div>
+      </div>
 
 
     </div>
-    <div flex layout="column">
-      <c3-line-1 cid="12" class="chart-style" data="jsondata.pumpCmd" options="{caption: 'pump',ymin:-255,ymax:255,width:400,height:200,xtype:'timeseries',type:'line'}" update="signalUpdate"></c3-line-1>
-      <c3-line-1 cid="13" class="chart-style" data="jsondata.carriageCmd" options="{caption: 'carriage',ymin:-255,ymax:255,width:400,height:200,xtype:'timeseries',type:'line'}" update="signalUpdate"></c3-line-1>
+    <div ng-if="initialized" flex layout="column">
+      <!-- <c3-line-1 cid="12" class="chart-style" data="jsondata.pumpCmd" options="{caption: 'pump',ymin:-255,ymax:255,width:400,height:200,xtype:'timeseries',type:'line'}" update="signalUpdate"></c3-line-1>
+    <c3-line-1 cid="13" class="chart-style" data="jsondata.carriageCmd" options="{caption: 'carriage',ymin:-255,ymax:255,width:400,height:200,xtype:'timeseries',type:'line'}" update="signalUpdate"></c3-line-1> -->
+      <div ng-if="initialized">
+        <c3-line-1 class="chart-style" cid="10" timestamp="control.timestamp" data="[jsondata.pumpCmd,jsondata.carriageCmd]" options="{caption: ['pump','carriage'], ymin:-255,ymax:255,width:400,height:200,xtype:'timeseries',type:'line'}"></c3-line-1>
+      </div>
+
     </div>
+
   </div>
 
-  <div flex>
-    <!-- <span class="raspi-label-s">Carriage Location</span> -->
-    <div layout-align="space-between center" layout="row">
-      <i class="raspi-led raspi-margin" ng-class="{'fa fa-circle-thin':jsondata.sa===0,'fa fa-circle':jsondata.sa===1}"></i>
-      <!-- <md-slider aria-label="red" class="raspi-padding" flex id="track-slider" max="{[settings.trackLen]}" min="0" ng-disabled="false" ng-model="jsondata.carriagePos"></md-slider> -->
-      <rzslider rz-slider-model="jsondata.carriagePos" rz-slider-options="{id: 1, floor: 0, ceil: settings.trackLen};"></rzslider>
 
-      <i class="raspi-led raspi-margin" ng-class="{'fa fa-circle-thin':jsondata.sb===0,'fa fa-circle':jsondata.sb===1}"></i>
-    </div>
-  </div>
 
-  <div animate class="raspi-directive-border" flex ng-if="jsondata.isWatering">
-    <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+  <!-- <span class="raspi-label-s">Carriage Location</span> -->
+  <div layout-align="space-between center" layout="row">
+    <i class="raspi-led raspi-margin" ng-class="{'fa fa-circle-thin':jsondata.sa===0,'fa fa-circle':jsondata.sa===1}"></i>
+    <!-- <md-slider aria-label="red" class="raspi-padding" flex id="track-slider" max="{[settings.trackLen]}" min="0" ng-disabled="false" ng-model="jsondata.carriagePos"></md-slider> -->
+    <rzslider rz-slider-model="jsondata.carriagePos" rz-slider-options="{id: 1, floor: 0, ceil: settings.trackLen};"></rzslider>
+
+    <i class="raspi-led raspi-margin" ng-class="{'fa fa-circle-thin':jsondata.sb===0,'fa fa-circle':jsondata.sb===1}"></i>
   </div>
+</div>
+
+<div animate class="raspi-directive-border" flex ng-if="jsondata.isWatering">
+  <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+</div>
 
 </div>

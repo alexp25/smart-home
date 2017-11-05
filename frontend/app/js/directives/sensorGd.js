@@ -22,8 +22,8 @@ angular.module('app').directive('sensorGd', function() {
 
         if (scope.metadata) {
           for (var i = 0; i < METADATA_TYPES.length; i++) {
-            if (metadata.type === METADATA_TYPES[i]) {
-              scope.type = metadata.type;
+            if (scope.metadata.type === METADATA_TYPES[i]) {
+              scope.type = scope.metadata.type;
               break;
             }
           }

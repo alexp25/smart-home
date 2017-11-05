@@ -4,8 +4,8 @@ angular.module('app').directive('c3Line1', function() {
     templateUrl: 'templates/directives/c3-line-1.html',
     scope: {
       data: '=',
+      timestamp: '=',
       options: '=?',
-      update: '=',
       cid: '=?'
     },
     link: function(scope) {
@@ -41,8 +41,6 @@ angular.module('app').directive('c3Line1', function() {
       $("#chart").prop('id', chartid);
       var height = $("#" + containerid).height();
       var width = $("#" + containerid).width();
-
-      var timeCrt = new Date();
 
       function pad(str, max) {
         return str.length < max ? pad("0" + str, max) : str;
@@ -174,45 +172,44 @@ angular.module('app').directive('c3Line1', function() {
 
 
       function addToChart(value, rows, n, caption) {
-        timeCrt = new Date();
+        var i;
+        var seriesDef = ['x'];
+        var values = [scope.timestamp];
+
         if (rows.length === 0) {
-          rows.push(['x', caption]);
+          if (value.length > 0) {
+            for (i = 0; i < value.length; i++) {
+              seriesDef.push(caption[i]);
+            }
+          } else {
+            seriesDef.push(caption);
+          }
+          rows.push(seriesDef);
         }
         // it does not work if data is undefined (errors)
         if (value === undefined) {
           value = 0;
         }
+        if (value.length > 0) {
+          for (i = 0; i < value.length; i++) {
+            values.push(value[i]);
+          }
+        } else {
+          values.push(value);
+        }
 
         if (rows.length >= n) {
           rows.splice(1, 1);
-          rows.push([timeCrt, value]);
+          rows.push(values);
         } else {
-          rows.push([timeCrt, value]);
+          rows.push(values);
         }
 
         return rows;
       }
 
       function updateChart(data) {
-        // chartdata.data.rows.unshift(data.columns);
-        // if (data.refresh) {
-        //   chart.unload();
-        // }
-
-
-
         rows1 = addToChart(data, scope.rows1, 50, scope.options.caption);
-        // console.log(rows1);
-        // var rows1 = [
-        //   ['x', 'data'],
-        //   [timeCrt, data],
-        //   // [2, 160, 240],
-        //   // [3, 200, 290],
-        //   // [4, 160, 230],
-        //   // [5, 130, 300],
-        //   // [6, 220, 320]
-        // ]
-
         chart.load({
           rows: rows1
         });
@@ -220,7 +217,7 @@ angular.module('app').directive('c3Line1', function() {
 
 
 
-      scope.$watch('update', function() {
+      scope.$watch('timestamp', function() {
         if (chartdata !== undefined && scope.data !== undefined) {
           updateChart(scope.data);
         }

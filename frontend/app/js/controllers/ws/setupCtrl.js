@@ -42,6 +42,14 @@ angular.module('app').controller('wsSetupCtrl', ['SharedProperties', 'PollingSer
     };
 
 
+    $scope.updateWsSettings = function() {
+      var settingsString = $scope.wsSettings.maxpump.toString() + ',' +
+        (Math.floor($scope.wsSettings.Kp * 1000)).toString() + ',' + (Math.floor($scope.wsSettings.Ki * 1000)).toString() + ',' +
+        (Math.floor($scope.wsSettings.Kd * 1000)).toString();
+      $scope.sendData('CMD_SET_OTHER', settingsString);
+    };
+
+
     $scope.getWsSettings = function() {
       $scope.hasData = false;
       $http.get($scope.serverURL + '/api/ws/setup').

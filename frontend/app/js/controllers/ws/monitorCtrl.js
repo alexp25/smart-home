@@ -15,6 +15,10 @@ angular.module('app').controller('wsMonitorCtrl', ['SharedProperties', '$scope',
       []
     ];
 
+    $scope.control = {
+      timestamp: new Date()
+    };
+
 
     $scope.chartData = {
       columns: ['x', 'pump', 'carriage'],
@@ -190,8 +194,8 @@ angular.module('app').controller('wsMonitorCtrl', ['SharedProperties', '$scope',
           value: $scope.jsondata.systemOnRem
         }];
 
-        $scope.signalUpdate = !$scope.signalUpdate;
-        // updateChart($scope.jsondata);
+        $scope.control.timestamp = new Date();
+        $scope.initialized = true;
       }
     };
 
@@ -200,19 +204,6 @@ angular.module('app').controller('wsMonitorCtrl', ['SharedProperties', '$scope',
         arr[i] = arr[i + 1];
       }
       arr[arr.length - 1] = val;
-    };
-
-    var updateChart = function(jsonObj) {
-      /** not working */
-      var newSample = [indexChart, jsonObj.pumpCmd, jsonObj.carriageCmd];
-      if (indexChart < 25) {
-        $scope.chartData.rows[indexChart] = newSample;
-        indexChart++;
-      } else {
-        insertEnd($scope.chartData.rows, newSample);
-      }
-      // console.log($scope.chartData.rows);
-      $scope.chartData.timestamp = new Date();
     };
 
     var websocketInit = function() {
@@ -236,6 +227,8 @@ angular.module('app').controller('wsMonitorCtrl', ['SharedProperties', '$scope',
           var jsondata = angular.fromJson(event.data);
 
           getSocketData(jsondata);
+
+
 
           $scope.timer[2] = $timeout(function() {
             if (webSocket.readyState === 1) {

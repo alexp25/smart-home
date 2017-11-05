@@ -4,7 +4,7 @@
     <div layout="column" class="raspi-button-holder">
       <md-button md-no-ink class="md-primary" ng-click="syncTime();">Sync time</md-button>
       <md-button md-no-ink class="md-primary" ng-click="sendData('CMD_SET_COUNTD_UPD',settings.nextSq.h.toString() + ',' + settings.nextSq.m.toString() + ',' + '0');">Set watering time</md-button>
-      <!-- <md-button md-no-ink class="md-primary" ng-click="updateSettings();">Update settings</md-button> -->
+      <md-button md-no-ink class="md-primary" ng-click="updateWsSettings();">Update settings</md-button>
     </div>
     <div layout="column" class="raspi-widget-holder-s">
       <span class="raspi-label-m" style="text-align:center;">Carriage controller</span>

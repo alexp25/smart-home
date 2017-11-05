@@ -115,12 +115,6 @@
 	"app":
 		[
 			{
-				"name":"ws_url",
-				"caption":"websocket url",
-				"type": "text",
-				"default":"localhost"
-			},
-			{
 				"name":"debugMode",
 				"caption":"debug mode",
 				"type": "check",
