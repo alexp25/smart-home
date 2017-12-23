@@ -9,7 +9,7 @@
 	"restart_script":"/home/pi/app_restart.sh",
 	"ws_connection":"tcp",
 	"authentication": true,
-	"mongo":true,
+	"mongo":false,
 	"blocking_db":true,
 	"enable_log":false,
 	"ws_ts":24,

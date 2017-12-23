@@ -1576,6 +1576,14 @@ def apiLogin():
             else:
                 result = appVariables.const1["RESULT_FAIL"]
                 return json.dumps({"result": result})
+        else:
+            # no database
+            if json_data['username'] == 'alex' and json_data['password'] == 'coto25':
+                session['user'] = True
+                session.permanent = False
+                result = appVariables.const1["RESULT_OK"]
+                return json.dumps({"result": result})
+
     except:
         appVariables.print_exception("[routes][/api/login]")
         result = appVariables.const1["RESULT_FAIL"]
@@ -1707,8 +1715,6 @@ if __name__ == '__main__':
 
     thread6 = ServerStatusThread()
     thread6.start()
-
-
 
     thread8 = ControlSystemsThread()
     thread8.start()
