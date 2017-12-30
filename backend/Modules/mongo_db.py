@@ -19,36 +19,30 @@ class MongoManager(object):
             if not appVariables.qDebug1.full():
                 appVariables.qDebug1.put(msg)
 
-    def find(self,db,collection,query):
+    def find(self, db, collection, query):
         if query is None:
             result = self.conn[db][collection].find()
         else:
             result = self.conn[db][collection].find(query)
         result_list = list(result)
-        # msg = json.dumps(result_list, default=json_util.default, indent=2)
-        # if not appVariables.qDebug1.full():
-        #     appVariables.qDebug1.put(msg)
         return result_list
-        # return json.dumps(result_list, default=json_util.default, indent=2)
-        # print(result_list)
-        # # print(result_list[0]['key'])
-        # print(json.dumps(result_list, default=json_util.default, indent=2))
-    def find_last_records(self,db,collection,query,N):
-        if N!=0:
-            pipeline=[{"$match": query},
-                      { "$sort" : { "_id" : -1 }},
-                      { "$limit" : N },
-                      { "$sort" : { "_id" : 1 }}
-                      ]
-        else:
-            pipeline = [{"$match": query},
-                        {"$sort": {"_id": 1}}
-                        ]
-        result = self.conn[db][collection].aggregate(pipeline)
-        # if query is None:
-        #     result = self.conn[db][collection].find({}).limit(N).sort([("_id",-1),])
+
+    def find_last_records(self, db, collection, query, N):
+        # if N != 0:
+        #     pipeline=[{"$match": query},
+        #               { "$sort" : { "_id" : -1 }},
+        #               { "$limit" : N },
+        #               { "$sort" : { "_id" : 1 }}
+        #               ]
         # else:
-        #     result = self.conn[db][collection].find(query).limit(N).sort([("_id",-1),])
+        #     pipeline = [{"$match": query},
+        #                 {"$sort": {"_id": 1}}
+        #                 ]
+        # result = self.conn[db][collection].aggregate(pipeline)
+        if query is None:
+            result = self.conn[db][collection].find({}).sort([("_id",-1),]).limit(N)
+        else:
+            result = self.conn[db][collection].find(query).sort([("_id",-1),]).limit(N)
         result_list = list(result)
         return result_list
         # db.sensor_data.find({"s_id": 132}).limit(3).sort({_id: -1})

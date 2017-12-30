@@ -39,6 +39,7 @@ def add_checksum(msg):
 
 
 appConfig = None
+mongomanager = None
 
 def init():
     global myList

@@ -1013,7 +1013,7 @@ def apiDatabaseUserInfo():
                         msg = "[routes][/api/database/user-info] " + str(result_db)
                         if not appVariables.qDebug1.full():
                             appVariables.qDebug1.put(msg)
-                    if (result_db['updatedExisting']):
+                    if result_db['updatedExisting']:
                         result = appVariables.const1["RESULT_OK"]
                     else:
                         result = appVariables.const1["RESULT_FAIL"]
@@ -1065,7 +1065,12 @@ def apiDatabaseSensorsNlast():
             N = param['n']
             if appVariables.appConfig['mongo']:
                 # result = appVariables.mongomanager.find("mydb","sensor_data",{"s_id":sid,"s_chan":cid})
-                result = appVariables.mongomanager.find_last_records("mydb", "sensor_data", {"s_id": sid, "s_chan": cid},N)
+                result = appVariables.mongomanager.find_last_records("mydb", "sensor_data", {"s_id": sid, "s_chan": cid}, N)
+
+                # query = {"sensorId": sid}
+                # result = appVariables.mongomanager.find("mydb", "control_settings", query)
+                # query = {"s_id": sid, "s_chan": cid}
+                # result = appVariables.mongomanager..find("mydb", "sensor_data", query).sort([("_id", 1)]).limit(N)
                 return json.dumps(result, default=json_util.default)
         except:
             appVariables.print_exception("[routes][/api/database/sensors/nlast]")

@@ -166,6 +166,7 @@ class IrrigationControlThread(Thread):
 
                             query = {"s_id": sid}
                             data = appVariables.mongomanager.find_last_records("mydb", "control_data", query,1)
+
                             # result = appVariables.mongomanager.find("mydb", "control_data", query)
 
 
