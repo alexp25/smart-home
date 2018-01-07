@@ -13,7 +13,7 @@
         </md-input-container>
         <md-input-container class="input-container">
           <span class="raspi-label-s">Channel id</span>
-          <input aria-hidden="true" class="md-primary" min="1" ng-model="settings.channelId" type="number"></input>
+          <input aria-hidden="true" class="md-primary" min="1" ng-max="settings.channelMax" ng-model="settings.channelId" type="number"></input>
         </md-input-container>
         <md-input-container class="input-container">
           <span class="raspi-label-s">Request</span>
@@ -27,7 +27,7 @@
 
       <div class="raspi-button-holder" layout="column">
         <md-button md-no-ink aria-hidden="true" class="md-primary" ng-click="userRequestData();resetAutoUpdate();">Request data</md-button>
-        <md-button md-no-ink class="md-primary" filename="sensor_data.csv" ng-csv="jsonObj">Export</md-button>
+        <md-button md-no-ink aria-hidden="true" class="md-primary" filename="sensor_data.csv" ng-csv="jsonObj">Export</md-button>
       </div>
     </div>
 

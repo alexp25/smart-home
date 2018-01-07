@@ -141,6 +141,7 @@ class DataBucketThread(Thread):
                                         if (dt_log != 0) and (t1 - appVariables.clientListFcn[i]['t0_log'] >= dt_log):
                                             has_logged = True
                                             cid = datatypes[k]['id']
+                                            pos = datatypes[k]['pos']
                                             timestamp = datetime.datetime.now()
                                             msg = "[DataBucketThread] " + "db log" + ', id: ' + str(
                                                 appVariables.clientList[i]['id']) + ', cid: ' + str(cid)
@@ -153,7 +154,7 @@ class DataBucketThread(Thread):
                                                     "s_type":appVariables.clientList[i]['type'],
                                                     "s_chan":cid,
                                                     "ts": str(timestamp),
-                                                    "value": cdata['data'][k + 1]
+                                                    "value": cdata['data'][pos]
                                                 }
                                                 appVariables.mongomanager.insert("mydb","sensor_data",doc)
 
@@ -165,7 +166,8 @@ class DataBucketThread(Thread):
                                                     "$set":{
                                                         "s_id":appVariables.clientList[i]['id'],
                                                         "s_type":appVariables.clientList[i]['type'],
-                                                        "n_chan":len(cdata['data'])
+                                                        # "n_chan":len(cdata['data'])
+                                                        "n_chan": len(datatypes)
                                                     }
                                                 }
                                                 appVariables.mongomanager.update("mydb", "sensors", query1, query2, ups=True)

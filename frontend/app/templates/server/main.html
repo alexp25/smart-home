@@ -22,9 +22,9 @@
       <md-button md-no-ink class="md-primary" ng-click="startVideoRecording()">Start video recording</md-button>
       <md-button md-no-ink class="md-primary" ng-click="stopVideoRecording()">Stop video recording</md-button>
       <!-- <md-button md-no-ink class="md-primary" ng-click="downloadLog();">Save log</md-button> -->
-      <md-button md-no-ink class="md-primary" ng-click="downloadServerLog('/api/download/log-dbg');">Download server log</md-button>
-      <md-button md-no-ink class="md-primary" ng-click="downloadServerLog('/api/download/log-tcp-in');">Download tcp in log</md-button>
-      <md-button md-no-ink class="md-primary" ng-click="downloadServerLog('/api/download/log-tcp-out');">Download tcp out log</md-button>
+      <md-button md-no-ink class="md-primary" href="/api/download/log-dbg" download="log-db.txt">Download server log</md-button>
+      <md-button md-no-ink class="md-primary" href="/api/download/log-tcp-in" download="log-tcp-in">Download tcp in log</md-button>
+      <md-button md-no-ink class="md-primary" href="/api/download/log-tcp-out" download="log-tcp-out.txt">Download tcp out log</md-button>
       <md-button md-no-ink class="md-primary" ng-click="restart();">Restart</md-button>
     </div>
 

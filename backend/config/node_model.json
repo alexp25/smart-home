@@ -531,7 +531,10 @@
         "id":1,
         "type": "light level",
         "unit": "",
-        "multiplier": 1
+		"minValue": 0,
+        "maxValue": 255,
+        "multiplier": 1,
+        "log": 60
       }],
       "commands": [{
           "name": "id",
