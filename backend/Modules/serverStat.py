@@ -21,6 +21,7 @@ class serverStat(object):
             pass
 
         return cpu
+
     def getSerialPorts(self,name):
         ##                result = subprocess.check_output(["ls","dev/tty/*"],shell=True)
         p = subprocess.Popen("ls /dev/"+name+"*",shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)

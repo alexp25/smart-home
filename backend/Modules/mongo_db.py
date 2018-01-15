@@ -9,15 +9,19 @@ class MongoManager(object):
         self.conn=None
 
     def connect(self):
+        result = False
         try:
             self.conn = pymongo.MongoClient('mongodb://localhost:27017/')
             msg = "[MongoManager] Connected successfully"
             if not appVariables.qDebug1.full():
                 appVariables.qDebug1.put(msg)
+            result = True
         except pymongo.errors.ConnectionFailure, e:
-            msg = "[MongoManager] Could not connect to MongoDB: " + e
+            msg = "[MongoManager] Could not connect to MongoDB: " + str(e)
             if not appVariables.qDebug1.full():
                 appVariables.qDebug1.put(msg)
+
+        return result
 
     def find(self, db, collection, query):
         if query is None:

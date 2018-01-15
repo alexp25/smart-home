@@ -50,6 +50,7 @@ from AppModules.TCPServerThread import TCPServerThread
 from AppModules.ControlSystemsThread import ControlSystemsThread
 from AppModules.IrrigationControlThread import IrrigationControlThread
 from AppModules.DatabaseManagerProcess import DatabaseManagerProcess
+from AppModules.ServerManager import ServerManagerThread
 
 
 # test
@@ -74,8 +75,6 @@ server_cmd = serverCmd()
 
 if appVariables.appConfig['mongo'] == True:
     from Modules.mongo_db import MongoManager
-    appVariables.mongomanager = MongoManager()
-    appVariables.mongomanager.connect()
     from bson import json_util
 
 # app config
@@ -1697,6 +1696,8 @@ if __name__ == '__main__':
     q_write_tcp = Queue(maxsize=10)
     time.sleep(1)
 
+    appVariables.mongomanager = MongoManager()
+
     if appVariables.appConfig['modules']['watering_system']:
         thread1 = IrrigationControlThread()
         thread1.start()
@@ -1724,6 +1725,7 @@ if __name__ == '__main__':
     thread8 = ControlSystemsThread()
     thread8.start()
 
+
     if appVariables.appConfig['rpi']:
         appVariables.camera_remote = Camera2(None, appVariables.qDebug1)
         if appVariables.appConfig['modules']['sound']:
@@ -1735,10 +1737,12 @@ if __name__ == '__main__':
         else:
             appVariables.raspicam = Camera1()
 
+        if appVariables.appConfig["mongo"]:
+            thread8 = ServerManagerThread()
+            thread8.start()
 
-
-    p = Process(target=DatabaseManagerProcess, args=(appVariables.qDatabaseIn,appVariables.qDatabaseOut,appVariables.qDebug1,appVariables.appConfig["storage"] + "/" + appVariables.appConfig['db_file']))
-    p.start()
+    # p = Process(target=DatabaseManagerProcess, args=(appVariables.qDatabaseIn,appVariables.qDatabaseOut,appVariables.qDebug1,appVariables.appConfig["storage"] + "/" + appVariables.appConfig['db_file']))
+    # p.start()
 
     msg = "[main] " + 'server started'
     if not appVariables.qDebug1.full():

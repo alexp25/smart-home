@@ -77,9 +77,9 @@ def audioProcess(q,qCmd,qInfo):
         try:
             devinfo=p.get_device_info_by_index(i)
             devname_crt=devinfo['name']
-            print(str(i)+'.'+devname_crt+', input channels: '+str(devinfo['maxInputChannels']))
+            # print(str(i)+'.'+devname_crt+', input channels: '+str(devinfo['maxInputChannels']))
             if devname in devname_crt:
-                print 'selected'
+                # print 'selected'
                 devindex=i
         except:
             print 'no audio device'

@@ -1,6 +1,7 @@
 {
 	"rpi": false,
 	"db_file":"Database/mydatabase.db",
+	"db_path":"",
 	"storage": ".",
 	"storage1": "/home/pi",
 	"log_file_stdout":"stdout_log.txt",

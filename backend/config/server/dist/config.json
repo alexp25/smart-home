@@ -17,6 +17,6 @@
 		"pi_camera":true,
 		"tcp_server":true,
 		"watering_system":true,
-		"sound": true
+		"sound": false
 	}
 }
