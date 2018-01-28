@@ -74,7 +74,10 @@ class DebugPrintThread(Thread):
                         if s['first']:
                             open_style = "w"
                             s['first'] = False
-                        with open(s['file'], open_style) as myfile:
-                            for e in s['buf']:
-                                myfile.write(e + '\r\n')
+                        try:
+                            with open(s['file'], open_style) as myfile:
+                                for e in s['buf']:
+                                    myfile.write(e + '\r\n')
+                        except:
+                            print(appVariables.format_exception(""))
                     s['buf'] = []

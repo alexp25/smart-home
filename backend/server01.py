@@ -1479,31 +1479,47 @@ def apiStopRec():
 
 @app.route('/api/restart')
 def apiRestart():
-    if 'user' in session or not appVariables.appConfig['authentication']:
-        try:
-            # open process, DON'T wait for result (stdin,stdout,stderr are None)
-            proc = subprocess.Popen(['bash '+appVariables.appConfig["restart_script"]], shell=True,
-                         stdin=None, stdout=None, stderr=None, close_fds=True)
-            result = appVariables.const1["RESULT_OK"]
-            return json.dumps({"result": result})
-            # restart_program()
-        except:
-            appVariables.print_exception("[routes][/api/restart]")
-    else:
-        return jsonify({"error":"unauthorized access"})
+    try:
+        # open process, DON'T wait for result (stdin,stdout,stderr are None)
+        proc = subprocess.Popen(['bash ' + appVariables.appConfig["restart_script"]], shell=True,
+                                stdin=None, stdout=None, stderr=None, close_fds=True)
+        result = appVariables.const1["RESULT_OK"]
+        return json.dumps({"result": result})
+        # restart_program()
+    except:
+        appVariables.print_exception("[routes][/api/restart]")
+    # if 'user' in session or not appVariables.appConfig['authentication']:
+    #     try:
+    #         # open process, DON'T wait for result (stdin,stdout,stderr are None)
+    #         proc = subprocess.Popen(['bash '+appVariables.appConfig["restart_script"]], shell=True,
+    #                      stdin=None, stdout=None, stderr=None, close_fds=True)
+    #         result = appVariables.const1["RESULT_OK"]
+    #         return json.dumps({"result": result})
+    #         # restart_program()
+    #     except:
+    #         appVariables.print_exception("[routes][/api/restart]")
+    # else:
+    #     return jsonify({"error":"unauthorized access"})
 
 @app.route('/api/reboot')
 def apiReboot():
-    if 'user' in session or not appVariables.appConfig['authentication']:
-        try:
-            server_cmd.restart()
-            result = appVariables.const1["RESULT_OK"]
-        except:
-            appVariables.print_exception("[routes][/api/reboot]")
-            result = appVariables.const1["RESULT_FAIL"]
-        return json.dumps({"result": result})
-    else:
-        return jsonify({"error":"unauthorized access"})
+    try:
+        server_cmd.restart()
+        result = appVariables.const1["RESULT_OK"]
+    except:
+        appVariables.print_exception("[routes][/api/reboot]")
+        result = appVariables.const1["RESULT_FAIL"]
+    return json.dumps({"result": result})
+    # if 'user' in session or not appVariables.appConfig['authentication']:
+    #     try:
+    #         server_cmd.restart()
+    #         result = appVariables.const1["RESULT_OK"]
+    #     except:
+    #         appVariables.print_exception("[routes][/api/reboot]")
+    #         result = appVariables.const1["RESULT_FAIL"]
+    #     return json.dumps({"result": result})
+    # else:
+    #     return jsonify({"error":"unauthorized access"})
         
 @app.route('/api/start-sound-a')
 def apiStartSoundA():

@@ -2,11 +2,15 @@ import json
 from multiprocessing import Queue
 import sys
 
-def print_exception(msg):
+def format_exception(msg):
     exc_type, exc_value = sys.exc_info()[:2]
     exceptionMessage = str(exc_type.__name__) + ': ' + str(exc_value)
     em1 = 'Error on line {}'.format(sys.exc_info()[-1].tb_lineno)
     msg1 = msg + ' ' + em1 + ', ' + exceptionMessage
+    return msg1
+
+def print_exception(msg):
+    msg1 = format_exception(msg)
     if not qDebug1.full():
         qDebug1.put(msg1)
 

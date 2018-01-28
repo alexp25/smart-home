@@ -534,7 +534,7 @@
 		"minValue": 0,
         "maxValue": 255,
         "multiplier": 1,
-        "log": 60
+        "log": 1800
       }],
       "commands": [{
           "name": "id",
