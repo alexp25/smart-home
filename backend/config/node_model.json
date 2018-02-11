@@ -533,8 +533,7 @@
         "unit": "",
 		"minValue": 0,
         "maxValue": 255,
-        "multiplier": 1,
-        "log": 1800
+        "multiplier": 1
       }],
       "commands": [{
           "name": "id",

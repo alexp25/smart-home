@@ -77,6 +77,7 @@ class IrrigationControlThread(Thread):
         if not appVariables.qDebug1.full():
             appVariables.qDebug1.put(msg)
         flag_control = 0
+        time.sleep(5)
         configOk = self.loadControlSettings()
 
         debounce_counter=0

@@ -24,50 +24,57 @@ class MongoManager(object):
         return result
 
     def find(self, db, collection, query):
-        if query is None:
-            result = self.conn[db][collection].find()
+        if self.conn:
+            if query is None:
+                result = self.conn[db][collection].find()
+            else:
+                result = self.conn[db][collection].find(query)
+            result_list = list(result)
         else:
-            result = self.conn[db][collection].find(query)
-        result_list = list(result)
+            result_list = None
         return result_list
 
     def find_last_records(self, db, collection, query, N):
-        # if N != 0:
-        #     pipeline=[{"$match": query},
-        #               { "$sort" : { "_id" : -1 }},
-        #               { "$limit" : N },
-        #               { "$sort" : { "_id" : 1 }}
-        #               ]
-        # else:
-        #     pipeline = [{"$match": query},
-        #                 {"$sort": {"_id": 1}}
-        #                 ]
-        # result = self.conn[db][collection].aggregate(pipeline)
-        if query is None:
-            result = self.conn[db][collection].find({}).sort([("_id",-1),]).limit(N)
+        if self.conn:
+            if query is None:
+                result = self.conn[db][collection].find({}).sort([("_id",-1),]).limit(N)
+            else:
+                result = self.conn[db][collection].find(query).sort([("_id",-1),]).limit(N)
+            result_list = list(result)
         else:
-            result = self.conn[db][collection].find(query).sort([("_id",-1),]).limit(N)
-        result_list = list(result)
+            result_list = None
         return result_list
         # db.sensor_data.find({"s_id": 132}).limit(3).sort({_id: -1})
 
 
 
     def insert(self,db,collection,document):
-        result = self.conn[db][collection].insert(document)
+        if self.conn:
+            result = self.conn[db][collection].insert(document)
+        else:
+            result = None
         return result
 
     def update(self,db,collection,query,update_doc,ups=False):
-        result = self.conn[db][collection].update(query, update_doc, upsert=ups)
+        if self.conn:
+            result = self.conn[db][collection].update(query, update_doc, upsert=ups)
+        else:
+            result = None
         return result
 
     def remove(self,db,collection,document):
-        result = self.conn[db][collection].remove(document)
+        if self.conn:
+            result = self.conn[db][collection].remove(document)
+        else:
+            result = None
         return result
 
     def aggregate_pipeline(self,db,collection,pipeline):
-        result = self.conn[db][collection].aggregate(pipeline)
-        result_list = list(result)
+        if self.conn:
+            result = self.conn[db][collection].aggregate(pipeline)
+            result_list = list(result)
+        else:
+            result_list = None
         return result_list
 
 
