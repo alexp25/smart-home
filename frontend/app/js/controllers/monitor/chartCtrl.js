@@ -277,7 +277,7 @@ angular.module('app').controller('monitorChartCtrl', ['SharedProperties', 'Globa
           $scope.settings.channelMax = element.n_chan;
         }
       });
-      if ($scope.settings.channelId > $scope.settings.channelMax){
+      if ($scope.settings.channelId > $scope.settings.channelMax) {
         $scope.settings.channelId = $scope.settings.channelMax;
       }
     }
@@ -310,7 +310,7 @@ angular.module('app').controller('monitorChartCtrl', ['SharedProperties', 'Globa
           // $scope.settings.channelId = 0;
           console.log("get nodes done");
           // getMaxChan(res);
-  
+
           $scope.userRequestData();
           if ($scope.settings.weatherData === true) {
             $scope.getWeatherData();
@@ -323,6 +323,8 @@ angular.module('app').controller('monitorChartCtrl', ['SharedProperties', 'Globa
           }
           $scope.initialized = true;
         });
+      }).catch(function(err) {
+        console.log(err);
       });
     };
 

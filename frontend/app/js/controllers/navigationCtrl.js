@@ -2,7 +2,7 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
   '$log', '$timeout', '$filter', '$state', '$location',
   '$rootScope', '$templateCache',
   '$mdSidenav', '$mdUtil', '$mdMedia', '$q', 'GlobalFcnService', 'StorageService',
-  function(AuthService, SharedProperties, $scope, $log, $timeout, $filter, $state,
+  function (AuthService, SharedProperties, $scope, $log, $timeout, $filter, $state,
     $location,
     $rootScope, $templateCache, $mdSidenav, $mdUtil, $mdMedia, $q, GlobalFcnService, StorageService) {
 
@@ -33,22 +33,22 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
 
 
     var isMobile = {
-      Android: function() {
+      Android: function () {
         return navigator.userAgent.match(/Android/i);
       },
-      BlackBerry: function() {
+      BlackBerry: function () {
         return navigator.userAgent.match(/BlackBerry/i);
       },
-      iOS: function() {
+      iOS: function () {
         return navigator.userAgent.match(/iPhone|iPad|iPod/i);
       },
-      Opera: function() {
+      Opera: function () {
         return navigator.userAgent.match(/Opera Mini/i);
       },
-      Windows: function() {
+      Windows: function () {
         return navigator.userAgent.match(/IEMobile/i);
       },
-      any: function() {
+      any: function () {
         return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
       }
     };
@@ -72,7 +72,7 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
         name: 'Setup',
         url: '#/ws/setup',
         icon: 'fa fa-wrench'
-      },{
+      }, {
         name: 'Setup advanced',
         url: '#/ws/setup-advanced',
         icon: 'fa fa-wrench'
@@ -114,33 +114,33 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
     }, {
       name: 'Settings',
       subSections: [{
-          name: 'App',
-          url: '#/settings/app',
-          icon: 'fa fa-wrench'
-        }, {
-          name: 'Monitor',
-          url: '#/settings/monitor',
-          icon: 'fa fa-wrench'
-        }, {
-          name: 'Nodes',
-          url: '#/settings/nodes',
-          icon: 'fa fa-wrench'
-        },
-        // {
-        //   name: 'Weather',
-        //   url: '#/settings/weather',
-        //   icon: ''
-        // },
-        {
-          name: 'User',
-          url: '#/settings/user',
-          icon: 'fa fa-wrench'
-        },
-        {
-          name: 'Admin',
-          url: '#/settings/admin',
-          icon: 'fa fa-wrench'
-        }
+        name: 'App',
+        url: '#/settings/app',
+        icon: 'fa fa-wrench'
+      }, {
+        name: 'Monitor',
+        url: '#/settings/monitor',
+        icon: 'fa fa-wrench'
+      }, {
+        name: 'Nodes',
+        url: '#/settings/nodes',
+        icon: 'fa fa-wrench'
+      },
+      // {
+      //   name: 'Weather',
+      //   url: '#/settings/weather',
+      //   icon: ''
+      // },
+      {
+        name: 'User',
+        url: '#/settings/user',
+        icon: 'fa fa-wrench'
+      },
+      {
+        name: 'Admin',
+        url: '#/settings/admin',
+        icon: 'fa fa-wrench'
+      }
       ]
     }, {
       name: 'Webcam',
@@ -148,7 +148,7 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
         name: 'Server',
         url: '#/webcam/home',
         icon: 'fa fa-camera'
-      },{
+      }, {
         name: 'Other',
         url: '#/webcam/other',
         icon: 'fa fa-camera'
@@ -162,38 +162,38 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
       }]
     }];
 
-    $scope.login = function() {
+    $scope.login = function () {
       $state.go('login');
     };
 
     function buildToggler(componentId) {
-      return function() {
+      return function () {
         $mdSidenav(componentId).toggle();
       };
     }
     // $scope.toggleLeft = buildToggler('left');
 
-    $scope.toggleLeft = function() {
-      $mdSidenav('left').toggle().then(function() {
+    $scope.toggleLeft = function () {
+      $mdSidenav('left').toggle().then(function () {
         $scope.sidenavVisible = $mdSidenav('left').isOpen();
         console.log('sidenav toggle: ', $mdSidenav('left').isOpen());
       });
     };
 
-    $scope.closeSidenav = function() {
+    $scope.closeSidenav = function () {
       $mdSidenav('left').close()
-        .then(function() {
+        .then(function () {
           $log.debug("close LEFT is done");
         });
     };
 
-    $scope.toggleSidenav = function() {
+    $scope.toggleSidenav = function () {
       if ($mdMedia('gt-md')) {
         $scope.lockLeft = !$scope.lockLeft;
         $scope.sidenavVisible = $scope.lockLeft;
 
         $rootScope.flagRefresh = false;
-        $timeout(function() {
+        $timeout(function () {
           $rootScope.flagRefresh = true;
         }, 500);
 
@@ -203,7 +203,7 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
       // console.log();
     };
 
-    $scope.changeUrlTo = function(section) {
+    $scope.changeUrlTo = function (section) {
       if (section.hasOwnProperty('url')) {
         $location.path(section.url.replace('#', ''));
         $scope.openPage = section;
@@ -222,7 +222,7 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
       }
     };
 
-    var selectMenuLvl1 = function(section) {
+    var selectMenuLvl1 = function (section) {
       section.isOpen = true;
       for (var i = 0; i < $scope.menuList.length; i++) {
         if ($scope.menuList[i] !== section) {
@@ -231,7 +231,7 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
       }
     };
 
-    var changeUrl = function(changedLvl) {
+    var changeUrl = function (changedLvl) {
       if (changedLvl === 1) {
         //console.log('change lvl1');
         elementLvl1 = $scope.menuList[$scope.tabSelection.lvl1];
@@ -257,7 +257,7 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
       }
     };
 
-    var selectMenuFromUrl = function(value) {
+    var selectMenuFromUrl = function (value) {
       var found = false;
       value = '#' + value;
       //console.log(value);
@@ -280,7 +280,7 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
       }
     };
 
-    var selectTabsFromUrl = function(value) {
+    var selectTabsFromUrl = function (value) {
       //search through menu structure to find matching url and corresponding indexes for 2 way bindning with the tabs
       var found = false;
       value = '#' + value;
@@ -318,7 +318,7 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
       }
     };
     $rootScope.$on('$stateChangeStart',
-      function(event, toState, toParams, fromState, fromParams) {
+      function (event, toState, toParams, fromState, fromParams) {
 
         console.log('navigationCtrl stateChangeStart to:');
         console.log(toState.name);
@@ -345,7 +345,7 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
       });
 
     $rootScope.$on('$viewContentLoaded',
-      function(event, toState, toParams, fromState, fromParams) {
+      function (event, toState, toParams, fromState, fromParams) {
         //window.scrollTo(0, 0);
         console.log("viewContentLoaded");
       });
@@ -355,9 +355,9 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
     this is used to be able to load user settings at app start
     i.e. navigation style
     */
-    $scope.$watch(function() {
+    $scope.$watch(function () {
       return AuthService.isLoggedInCheck();
-    }, function(newVal, oldVal, scope) {
+    }, function (newVal, oldVal, scope) {
       console.log('watch user: ', newVal);
       if (newVal === true && oldVal !== true) {
         $scope.init();
@@ -385,7 +385,7 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
     // };
 
 
-    $scope.init = function() {
+    $scope.init = function () {
       console.log("navigation init");
 
 
@@ -410,7 +410,7 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
       console.log('authenticated: ', $scope.authenticated);
       if ($scope.authenticated) {
         console.log("navigationCtrl get settings");
-        GlobalFcnService.getSettings().then(function(response) {
+        GlobalFcnService.getSettings().then(function (response) {
 
           console.log(response);
           $scope.settings = response.data.userSettings.app;
@@ -433,11 +433,11 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
           }
           if ($scope.navstyle === NAV_TABS) {
             selectTabsFromUrl($location.path());
-            $scope.$watch('tabSelection.lvl1', function() {
+            $scope.$watch('tabSelection.lvl1', function () {
               changeUrl(1);
               changeUrl(2);
             });
-            $scope.$watch('tabSelection.lvl2', function() {
+            $scope.$watch('tabSelection.lvl2', function () {
               changeUrl(2);
             });
           }
@@ -449,12 +449,28 @@ angular.module('app').controller('navigationCtrl', ['AuthService', 'SharedProper
           //   $scope.authenticated = AuthService.isLoggedInCheck();
           //   console.log('authenticated: ', $scope.authenticated);
           // });
+        }).catch(function (err) {
+          console.log(err);
+
+          $scope.navstyle = NAV_TABS;
+
+          if ($scope.navstyle === NAV_TABS) {
+            selectTabsFromUrl($location.path());
+            $scope.$watch('tabSelection.lvl1', function () {
+              changeUrl(1);
+              changeUrl(2);
+            });
+            $scope.$watch('tabSelection.lvl2', function () {
+              changeUrl(2);
+            });
+          }
+
         });
       }
     };
 
 
-    $scope.isSelected = function(url) {
+    $scope.isSelected = function (url) {
       if ($location.path() === url.replace('#', '')) {
         return true;
       }

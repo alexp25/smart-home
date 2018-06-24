@@ -15,7 +15,7 @@
           "multiplier": 1,
           "minValue": 0,
           "maxValue": 100,
-          "log": 60,
+          "log": 600,
 		  "value":0
         },
         {
@@ -26,7 +26,7 @@
           "multiplier": 10,
           "minValue": 0,
           "maxValue": 1000,
-          "log": 60,
+          "log": 600,
 		  "value":0
         }
       ],
@@ -66,7 +66,7 @@
           "multiplier": 1,
           "minValue": 300,
           "maxValue": 600,
-          "log": 60
+          "log": 600
         },
         {
           "id": 2,
@@ -76,7 +76,7 @@
           "multiplier": 10,
           "minValue": 0,
           "maxValue": 500,
-          "log": 60
+          "log": 600
         }, {
           "id": 3,
           "pos":3,
@@ -85,7 +85,7 @@
           "multiplier": 1,
           "minValue": 0,
           "maxValue": 100,
-          "log": 60
+          "log": 600
         }
       ],
       "commands": [{
@@ -119,7 +119,7 @@
           "multiplier": 10,
           "minValue": -100,
           "maxValue": 1000,
-          "log": 60
+          "log": 600
         },
         {
           "id": 2,
@@ -129,7 +129,7 @@
           "multiplier": 1,
           "minValue": 0,
           "maxValue": 4095,
-          "log": 60
+          "log": 600
         }
       ],
       "commands": [{
@@ -163,7 +163,7 @@
           "multiplier": 1,
           "minValue": 0,
           "maxValue": 100,
-          "log": 60
+          "log": 600
         }
       ],
       "commands": [{
@@ -198,7 +198,7 @@
           "multiplier": 10,
           "minValue": -100,
           "maxValue": 1000,
-          "log": 60
+          "log": 600
         },
         {
           "id": 2,
@@ -208,7 +208,7 @@
           "multiplier": 10,
           "minValue": 0,
           "maxValue": 1000,
-          "log": 60
+          "log": 600
         }
       ],
       "commands": [{
@@ -243,7 +243,7 @@
           "multiplier": 1,
           "minValue": 900,
           "maxValue": 1100,
-          "log": 60
+          "log": 600
         },
         {
           "id": 2,
@@ -251,7 +251,7 @@
           "type": "height",
           "unit": "m",
           "multiplier": 1,
-          "log": 60
+          "log": 600
         },
 		{
           "id": 3,
@@ -261,7 +261,7 @@
           "multiplier": 10,
 		  "minValue": -100,
           "maxValue": 1000,
-          "log": 60
+          "log": 600
         }
       ],
       "commands": [{

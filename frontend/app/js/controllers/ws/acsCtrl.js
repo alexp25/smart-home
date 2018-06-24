@@ -25,6 +25,8 @@ angular.module('app').controller('wsAcsCtrl', ['$scope', 'SharedProperties', 'Gl
             $scope.getData();
           });
         });
+      }).catch(function(err){
+        console.log(err);
       });
 
     };

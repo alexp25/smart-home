@@ -63,6 +63,7 @@ angular.module('app').controller('monitorViewAllCtrl', ['SharedProperties', 'Glo
         console.log($scope.settings);
       }, function(err) {
         // handle possible errors that occur when making the request.
+        console.log(err);
         $scope.hasData = true;
         alert('error');
       });
