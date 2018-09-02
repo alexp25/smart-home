@@ -1,11 +1,11 @@
 import datetime
-import SocketServer
+import socketserver
 import appVariables
 import time
 import copy
 from multiprocessing import Queue
 
-class TCPRequestHandler(SocketServer.StreamRequestHandler):
+class TCPRequestHandler(socketserver.StreamRequestHandler):
     def handle(self):
         try:
             # print "Connection from: %s" % str(self.client_address)
@@ -61,75 +61,71 @@ class TCPRequestHandler(SocketServer.StreamRequestHandler):
             while 1:
                 time.sleep(0.01)
                 t1=time.time()
-                # self.data = self.request.recv(1024)
-                # self.c = self.request.recv(1)
-                # handle receiving data
-                while 1:
-                    try:
-                        self.c = self.rfile.read(1)
-                    except:
-                        break
 
-                    self.data += self.c
-                    self.index += 1
-                    if ((self.c == '\n') or (self.index >= 1024)):
-                        self.index = 0
-                        # self.data = self.data.strip()
+                try:
+                    self.data = self.request.recv(1024).decode()
+                except:
+                    self.data = None
 
-                        # msg = "[TCPServerThread] recv " + str(self.client_address[0]) + ': ' + str(self.data)
-                        # if not appVariables.qDebug1.full():
-                        #     appVariables.qDebug1.put(msg)
+                if self.data is not None:
 
-                        # parse client data
+                    # self.data = self.data.strip()
 
-                        clientNumStr = self.data.split(",")
-                        # print clientNumStr
-                        clientData = [0] * len(clientNumStr)
-                        i = 0
-                        for i in range(len(clientNumStr)):
+                    # msg = "[TCPServerThread] recv " + str(self.client_address[0]) + ': ' + str(self.data)
+                    # if not appVariables.qDebug1.full():
+                    #     appVariables.qDebug1.put(msg)
+
+                    # parse client data
+
+                    # print(self.data)
+                    clientNumStr = self.data.split(",")
+                    # print clientNumStr
+                    clientData = [0] * len(clientNumStr)
+                    i = 0
+                    for i in range(len(clientNumStr)):
+                        try:
+                            clientData[i] = int(clientNumStr[i])
+                        except:
+                            clientData[i] = 0
+
+                    # update client list
+
+                    for i in range(len(appVariables.clientListFcn)):
+                        if appVariables.clientList[i]['ip'] == self.client_address[0]:
+                            appVariables.clientList[i]['in'] = self.data
+                            appVariables.clientInfoList[i]['ip'] = self.client_address[0]
+
+                            if len(clientData) > 2:
+                                if clientData[0] == 100:
+                                    # msg = "[TCPServerThread] code 100: " + str(clientData[1]) + ", " + str(clientData[2])
+                                    # if not appVariables.qDebug1.full():
+                                    #     appVariables.qDebug1.put(msg)
+                                    appVariables.clientList[i]['id'] = clientData[1]
+                                    appVariables.clientList[i]['type'] = clientData[2]
+
+                                    appVariables.clientInfoList[i]['id'] = clientData[1]
+                                    appVariables.clientInfoList[i]['type'] = clientData[2]
+
+                                else:
+                                    appVariables.clientList[i]['data'] = clientData
+
+                            if clientData[0] != 100:
+                                # use only actual data
+                                if not appVariables.clientListFcn[i]['q_in'].full():
+                                    appVariables.clientListFcn[i]['q_in'].put(
+                                        {'str': self.data, 'data': clientData})
+
+                            appVariables.clientListFcn[i]['t0'] = t1
+                            appVariables.clientList[i]['counter_rx'] = appVariables.clientList[i][
+                                                                           'counter_rx'] + 1
+
                             try:
-                                clientData[i] = int(clientNumStr[i])
+                                if (not appVariables.qTCPIn.full()) and (appVariables.clientList[i]['data'][0] != 211):
+                                    appVariables.qTCPIn.put('[' + str(appVariables.clientList[i]['id']) + '] ' + self.data)
                             except:
-                                clientData[i] = 0
+                                pass
 
-                        # update client list
-
-                        for i in range(len(appVariables.clientListFcn)):
-                            if appVariables.clientList[i]['ip'] == self.client_address[0]:
-                                appVariables.clientList[i]['in'] = self.data
-                                appVariables.clientInfoList[i]['ip'] = self.client_address[0]
-
-                                if len(clientData) > 2:
-                                    if clientData[0] == 100:
-                                        # msg = "[TCPServerThread] code 100: " + str(clientData[1]) + ", " + str(clientData[2])
-                                        # if not appVariables.qDebug1.full():
-                                        #     appVariables.qDebug1.put(msg)
-                                        appVariables.clientList[i]['id'] = clientData[1]
-                                        appVariables.clientList[i]['type'] = clientData[2]
-
-                                        appVariables.clientInfoList[i]['id'] = clientData[1]
-                                        appVariables.clientInfoList[i]['type'] = clientData[2]
-
-                                    else:
-                                        appVariables.clientList[i]['data'] = clientData
-
-                                if clientData[0] != 100:
-                                    # use only actual data
-                                    if not appVariables.clientListFcn[i]['q_in'].full():
-                                        appVariables.clientListFcn[i]['q_in'].put(
-                                            {'str': self.data, 'data': clientData})
-
-                                appVariables.clientListFcn[i]['t0'] = t1
-                                appVariables.clientList[i]['counter_rx'] = appVariables.clientList[i][
-                                                                               'counter_rx'] + 1
-
-                                try:
-                                    if (not appVariables.qTCPIn.full()) and (appVariables.clientList[i]['data'][0] != 211):
-                                        appVariables.qTCPIn.put('[' + str(appVariables.clientList[i]['id']) + '] ' + self.data)
-                                except:
-                                    pass
-
-                        self.data=''
+                    self.data=''
                 # end while
                 # handle sending data
                 for i in range(len(appVariables.clientList)):
@@ -140,7 +136,7 @@ class TCPRequestHandler(SocketServer.StreamRequestHandler):
                             appVariables.clientList[i]['counter_tx'] = appVariables.clientList[i]['counter_tx'] + 1
                             new_data = appVariables.add_checksum(new_data)
                             new_data += '\n'
-                            self.request.send(new_data)
+                            self.request.send(new_data.encode())
                             try:
                                 if (not appVariables.qTCPOut.full()) and (appVariables.clientList[i]['data'][0] != 211):
                                     appVariables.qTCPOut.put('[' + str(appVariables.clientList[i]['id']) + '] ' + new_data)
@@ -166,7 +162,7 @@ class TCPRequestHandler(SocketServer.StreamRequestHandler):
                 if expired:
                     break
 
-        except Exception, ex:
+        except:
             appVariables.print_exception("[TCPRequestHandler] exception. closing socket at " + self.client_address[0])
 
 
@@ -175,7 +171,7 @@ def simple_tcp_server():
     if not appVariables.qDebug1.full():
         appVariables.qDebug1.put(msg)
 
-    tcp_server = SocketServer.ThreadingTCPServer(
+    tcp_server = socketserver.ThreadingTCPServer(
         ("0.0.0.0", 8050),
         RequestHandlerClass=TCPRequestHandler,
         bind_and_activate=False)

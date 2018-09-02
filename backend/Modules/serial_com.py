@@ -56,19 +56,19 @@ class serialReadThread (threading.Thread):
 
                         # serial_com_port_status = True
                     except:
-                        print "serial read thread exception"
+                        print("serial read thread exception")
                         serial_com_port_status = False
                         # traceback.print_exc()
                         time.sleep(10)
                         # try to open the com port again
-                        print "opening serial port..."
+                        print("opening serial port...")
                         try:
                             if serial_com_port.isOpen() == True:
                                 serial_com_port.close()
                             serial_com_port = serial.Serial(serial_com_port_name, serial_com_port_baud_rate, timeout=3)
-                            print "serial port open"
+                            print("serial port open")
                         except:
-                            print "could not open serial port"
+                            print("could not open serial port")
 
                     if self.stopped():
                         print("thread " + self.name + " stop event detected\n")
@@ -108,12 +108,11 @@ class serialWriteThread (threading.Thread):
                         if serial_com_port.isOpen() == True:
                             if queue_write.empty() == False:
                                 result = queue_write.get(block=False)
-                                # print 'write ' + result
                                 serial_com_port.write(result)
-                                # print 'write ok'
+                      
                     except:
-                            print "serial write thread exception"
-                            # traceback.print_exc()
+                            print("serial write thread exception")
+
                             time.sleep(3)
 
                 print("exiting " + self.name +" thread")
@@ -154,11 +153,10 @@ class serialCom(object):
                         self.threads.append(thread2)
                 except:
                         message = 'serial exception: ' + traceback.format_exc()
-                        print message
+                        print(message)
 
 
     def stop(self):
-        print 'serialCom stop'
         if self.threads:
             for i in range(len(self.threads)):
                 self.threads[i].stop()
@@ -167,7 +165,6 @@ class serialCom(object):
 
     def send(self,msg):
         global queue_write
-        # print 'send: ' + msg
         queue_write.put(msg)
         return True
 

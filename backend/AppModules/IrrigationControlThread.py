@@ -30,6 +30,9 @@ class IrrigationControlThread(Thread):
         data=['']
         if appVariables.appConfig['mongo']:
             data = appVariables.mongomanager.find("mydb", "control_settings", None)
+        else:
+            return False
+
         if len(data) > 0:
             self.params = data
             self.ctrlSettings=[]
@@ -48,7 +51,7 @@ class IrrigationControlThread(Thread):
 
 
             for i in range(len(self.params)):
-                js = self.params[i] 
+                js = self.params[i]
                 Kp = js['Kp']
                 Ki = js['Ki']
                 Kd = js['Kd']
@@ -134,7 +137,7 @@ class IrrigationControlThread(Thread):
                         startdate = date1 - datetime.timedelta(hours=24)
                         enddate = date1.replace(microsecond=0)
                         startdate = startdate.replace(microsecond=0)
-                        print [startdate, enddate]
+                        print([startdate, enddate])
 
                         for i in range(len(self.params)):
                             js = self.params[i]

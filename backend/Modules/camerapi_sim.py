@@ -36,14 +36,13 @@ class myThread (threading.Thread):
 				self._req.clear()
 				start_time = time.time()
 			elapsed_time = time.time() - start_time
-##			print elapsed_time
 			if elapsed_time > 5:
 				time.sleep(0.9)
 				continue   
 			image = self.frames[count]
 			count = count + 1
 			if count > 2:
-			   count = 0
+				count = 0
 
 				
 			
@@ -56,7 +55,7 @@ class Camera1(object):
 		self.elapsed_time = 0
 		if not(self.threads):
 			print("starting thread")
-                        thread1 = myThread(1, "thread1")
+			thread1 = myThread(1, "thread1")
 			thread1.start()
 			self.threads.append(thread1)
 			

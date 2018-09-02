@@ -177,7 +177,7 @@ class serialArduino(object):
                 obj = {'code':dig,'hasbody':bodyEn,'body':body}
                 q2.put(obj)
                 
-                print obj
+                print(obj)
                 return True
  
 	def get_received_data(self):
@@ -187,7 +187,7 @@ class serialArduino(object):
                         try:
                                 data = q1.get(block=True,timeout=1)
                         except:
-                                print 'get data timeout'
+                                print('get data timeout')
                                 pass
                         finally:
                                 return data

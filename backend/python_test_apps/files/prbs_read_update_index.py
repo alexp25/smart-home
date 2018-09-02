@@ -9,7 +9,7 @@ for i,line in enumerate(file):
 file.close()
 file = open('index.txt','r')
 i=int(file.readline())
-print i,a[i]
+print(i,a[i])
 
 file.close()
 

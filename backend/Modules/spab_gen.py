@@ -21,7 +21,7 @@ class spab_gen(object):
                    10 : self.spab_10
         }
     def print_reg(self):
-        print self.reg
+        print(self.reg)
         
     # define the function blocks
     def spab_2(self):
@@ -81,10 +81,4 @@ class spab_gen(object):
         self.counter = 0
         
 
-    
 
-##spabgen = spab_gen(5)
-##spabgen.print_reg()
-##for i in range(50):
-##    print spabgen.spab_reg()
-##    time.sleep(0.1)

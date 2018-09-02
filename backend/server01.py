@@ -56,10 +56,15 @@ from AppModules.ServerManager import ServerManagerThread
 # test
 from AppModules.TCPServerAsync import simple_tcp_server
 
-if appVariables.appConfig['rpi'] == True:
-    from Modules.camerapi_opencv import Camera1
-    from AppModules.camera_remote import Camera2
-    from Modules.audio_a import audioAnalyzer
+if appVariables.appConfig['rpi']:
+    if appVariables.appConfig['modules']['opencv']:
+        from Modules.camerapi_opencv import Camera1
+        from AppModules.camera_remote import Camera2
+    else:
+        from Modules.camerapi import Camera1
+
+    if appVariables.appConfig['modules']['sound']:
+        from Modules.audio_a import audioAnalyzer
 
     if appVariables.appConfig['ws_connection']=='serial':
         from Modules.serial_com import serialCom
@@ -363,7 +368,6 @@ def appdata_socket(ws):
 def sync_device_controls(clientList):
     sync_types=["value","slider"]
     # for each client
-    # print json.dumps(clientList, indent=2)
     try:
         for client in clientList:
             if client['commands']!=False:
@@ -1134,7 +1138,7 @@ def apiDatabaseControl():
                     return json.dumps(result, default=json_util.default)
             else:
                 jdata=request.json
-                print jdata
+                print(jdata)
                 # if (req == 1):
                 #     # remove selected
                 #     appVariables.qDatabaseIn.put(("/api/database/control","DELETE FROM Control WHERE ID = (?) AND SensorId = (?) " ,(rowid,sid)))
@@ -1712,7 +1716,7 @@ if __name__ == '__main__':
     q_write_tcp = Queue(maxsize=10)
     time.sleep(1)
 
-    appVariables.mongomanager = MongoManager()
+
 
     if appVariables.appConfig['modules']['watering_system']:
         thread1 = IrrigationControlThread()
@@ -1743,7 +1747,8 @@ if __name__ == '__main__':
 
 
     if appVariables.appConfig['rpi']:
-        appVariables.camera_remote = Camera2(None, appVariables.qDebug1)
+        if appVariables.appConfig['modules']['opencv']:
+            appVariables.camera_remote = Camera2(None, appVariables.qDebug1)
         if appVariables.appConfig['modules']['sound']:
             appVariables.audio_a1 = audioAnalyzer()
             thread7 = SoundDataThread()
@@ -1754,6 +1759,7 @@ if __name__ == '__main__':
             appVariables.raspicam = Camera1()
 
         if appVariables.appConfig["mongo"]:
+            appVariables.mongomanager = MongoManager()
             thread8 = ServerManagerThread()
             thread8.start()
 

@@ -1,18 +1,11 @@
 import datetime
-import SocketServer
+import socketserver
 import appVariables
 import time
 
-class TCPRequestHandler(SocketServer.StreamRequestHandler):
+class TCPRequestHandler(socketserver.StreamRequestHandler):
     def handle(self):
         try:
-            # print "Connection from: %s" % str(self.client_address)
-            # request_msg = self.rfile.readline(1024)
-            # msg = "[simple_tcp_server] "+str(request_msg)
-            # if not appVariables.qDebug1.full():
-            #     appVariables.qDebug1.put(msg)
-            # self.wfile.write('211,\n')
-            # self.wfile.flush()
             self.request.setblocking(0)
             t0=time.time()
             self.data=''
@@ -46,7 +39,7 @@ class TCPRequestHandler(SocketServer.StreamRequestHandler):
                         appVariables.qDebug1.put(msg)
                     self.request.send("100,\n")
 
-        except Exception, ex:
+        except:
             appVariables.print_exception("[TCPRequestHandler]")
 
 
@@ -55,7 +48,7 @@ def simple_tcp_server():
     if not appVariables.qDebug1.full():
         appVariables.qDebug1.put(msg)
 
-    tcp_server = SocketServer.ThreadingTCPServer(
+    tcp_server = socketserver.ThreadingTCPServer(
         ("0.0.0.0", 8050),
         RequestHandlerClass=TCPRequestHandler,
         bind_and_activate=False)

@@ -79,10 +79,10 @@ def audioProcess(q,qCmd,qInfo):
             devname_crt=devinfo['name']
             # print(str(i)+'.'+devname_crt+', input channels: '+str(devinfo['maxInputChannels']))
             if devname in devname_crt:
-                # print 'selected'
+                # print('selected')
                 devindex=i
         except:
-            print 'no audio device'
+            print('no audio device')
 
     try:
         # test (pc): input_device_index=3
@@ -149,8 +149,6 @@ def audioProcess(q,qCmd,qInfo):
                     fftData2 = fftData1
 
                 for ifft in range(n_levels):
-                    # print fftData1List[0]
-                    # print fftData1List[ifft]
                     # filter fft data (power spectrum) to keep beats longer
                     if params["flag_filter_fft"]:
                         fftData2[ifft] = fftData2[ifft]*params2["alpha_fft_low_pass"]+(fftData1[ifft])*(1-params2["alpha_fft_low_pass"])
@@ -160,17 +158,13 @@ def audioProcess(q,qCmd,qInfo):
                     if fftData2[ifft]<params["min_fft_val"]:
                         fftData2[ifft]=params["min_fft_val"]
 
-                # print len(fftData2)
-                # print fftData2
 
                 # resample data to fit n elements, for display in app
                 n = 100
                 m = len(indata)
                 indata1 = np.interp(np.linspace(0, m - 1, n), np.arange(m), indata)
 
-                # print fftData2
                 fftData3=fftData2[1:n_levels]
-                # print fftData2
                 fftString = ''
                 for ifft in range(n_levels-1):
                     # fftData[i] = fftData[i] * 100 / LIMIT_SUP
