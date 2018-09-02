@@ -15,6 +15,6 @@ cd home/pi/Desktop/smart_home
 #	echo "starting app"
 #	sudo python hello_gevent.py
 #fi
-sudo python server01.py
+sudo python3 server01.py
 cd /
 #deactivate

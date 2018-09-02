@@ -1,0 +1,34 @@
+#!/bin/sh
+# freedns_update.sh: Update the public IP on freedns.afraid.org only if it has changed.
+## Place this script in the cron's job directory /etc/cron.d and assign the proper permissions
+## and owner
+## sudo chmod 500 /etc/cron.d/freedns_update.sh
+## sudo chown root:root /etc/cron.d/freedns_update.sh
+## https://thelastmaimou.wordpress.com/2014/03/23/find-pi-everywhere-freedns-a-free-dynamic-dns-service/
+
+
+
+
+
+## Add to /etc/crontab to execute on reboot and every 5 minutes
+## Edit /etc/crontab and append these two lines:
+## @reboot root /etc/cron.d/freedns_update.sh >/dev/null
+## */5 * * * * root /etc/cron.d/freedns_update.sh >/dev/null
+ 
+#Use your own values
+DOMAIN=webpie.twilightparadox.com
+HASHKEY=NENNcWIxN2o3ZE1GQVNHaFFJNUUwcVJpOjE1MjA1NDA4
+ 
+UPDATE_URL="http://freedns.afraid.org/dynamic/update.php?${HASHKEY}"
+    
+current_ip=$(wget -q --output-document - http://checkip.dyndns.org | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
+registered_ip=$(ping -qn -c 1 $DOMAIN | head -n 1 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
+ 
+if [ "${current_ip}" != "${registered_ip}" ]; then  
+   wget -q --read-timeout=0.0 --waitretry=5 --tries=400 --output-document /dev/null $UPDATE_URL
+   if [ $? -eq 0 ]; then
+     echo "$(date +"%b %_d %T") $(hostname) $0: IP address updated on freedns.afraid.org: new IP '${current_ip}', old IP '${registered_ip}'" >> /var/log/messages
+   else    
+     echo "$(date +"%b %_d %T") $(hostname) $0: ERROR IP address could not be  updated on freedns.afraid.org: current IP '${current_ip}', registered IP '${registered_ip}'" >> /var/log/messages
+   fi
+fi

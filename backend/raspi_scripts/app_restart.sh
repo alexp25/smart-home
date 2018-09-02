@@ -7,5 +7,5 @@ sleep 5
 
 cd /
 cd home/pi/Desktop/smart_home
-sudo python server01.py
+sudo python3 server01.py
 cd /
