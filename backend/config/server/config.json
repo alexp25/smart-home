@@ -1,5 +1,5 @@
 {
-	"rpi": false,
+	"rpi": true,
 	"db_file":"Database/mydatabase.db",
 	"db_path":"",
 	"storage": ".",
@@ -9,15 +9,16 @@
 	"log_file_tcp_out":"tcp_out_log.txt",
 	"restart_script":"/home/pi/app_restart.sh",
 	"ws_connection":"tcp",
-	"authentication": true,
+	"authentication": false,
 	"mongo":false,
 	"blocking_db":true,
 	"enable_log":false,
 	"ws_ts":24,
 	"modules":{
 		"pi_camera":true,
+		"opencv": false,
 		"tcp_server":true,
 		"watering_system":true,
-		"sound": true
+		"sound": false
 	}
 }
