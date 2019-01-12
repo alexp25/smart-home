@@ -5,6 +5,7 @@ from threading import Thread
 import sys
 import json
 import copy
+import Modules.db_utils as db_utils
 
 class DataBucketThread(Thread):
     def run(self):
@@ -25,7 +26,7 @@ class DataBucketThread(Thread):
                 time.sleep(0.01)
 
                 # get data from video processing
-                if appVariables.appConfig['rpi']:
+                if appVariables.appConfig['modules']['pi_camera']:
                     if appVariables.raspicam is not None:
                         video_processing_result = appVariables.raspicam.get_processing_result()
                         if video_processing_result is not None:
@@ -171,6 +172,28 @@ class DataBucketThread(Thread):
                                                     }
                                                 }
                                                 appVariables.mongomanager.update("mydb", "sensors", query1, query2, ups=True)
+                                            elif appVariables.appConfig['sql']:
+                                                data = ['']
+                                                appVariables.qDatabaseIn.put(('dataBucketThread',
+                                                         'SELECT * FROM Sensors WHERE sensorId = (?)', (appVariables.clientList[i]['id'])))
+                                                while data[0] != 'dataBucketThread':
+                                                    data = appVariables.qDatabaseOut.get(True)  # blocking
+
+                                                data = db_utils.get_array_result(data)
+
+                                                if not data or not len(data)>0:
+                                                    data = ['']
+                                                    appVariables.qDatabaseIn.put(('dataBucketThread2',
+                                                                                  'INSERT INTO Sensors (ID, sensorId, s_type, n_chan) VALUES (NULL, (?))',
+                                                                                  (appVariables.clientList[i]['id'], appVariables.clientList[i]['type']),len(datatypes)))
+                                                    while data[0] != 'dataBucketThread2':
+                                                        data = appVariables.qDatabaseOut.get(True)  # blocking
+
+                                                data = ['']
+                                                appVariables.qDatabaseIn.put(('dataBucketThread3',
+                                                         'INSERT INTO SensorData (ID, s_id, s_type, s_chan, s_unit, ts, value) VALUES(NULL, (?), (?), (?), (?), (?), (?))',
+                                                         (appVariables.clientList[i]['id'], appVariables.clientList[i]['type'], cid, None, str(timestamp), cdata['data'][pos])))
+
                                 else:
                                     break
                             if has_logged:

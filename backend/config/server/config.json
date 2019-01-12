@@ -1,24 +1,54 @@
 {
-	"rpi": true,
-	"db_file":"Database/mydatabase.db",
-	"db_path":"",
-	"storage": ".",
-	"storage1": "/home/pi",
-	"log_file_stdout":"stdout_log.txt",
-	"log_file_tcp_in":"tcp_in_log.txt",
-	"log_file_tcp_out":"tcp_out_log.txt",
-	"restart_script":"/home/pi/app_restart.sh",
-	"ws_connection":"tcp",
-	"authentication": false,
-	"mongo":false,
-	"blocking_db":true,
-	"enable_log":false,
-	"ws_ts":24,
-	"modules":{
-		"pi_camera":true,
-		"opencv": false,
-		"tcp_server":true,
-		"watering_system":true,
-		"sound": false
+	"rpi": false,
+	"debug": {
+		"rpi": false,
+		"db_file": "mydatabase.db",
+		"db_path": "",
+		"storage": ".",
+		"storage1": "/home/pi",
+		"log_file_stdout": "stdout_log.txt",
+		"log_file_tcp_in": "tcp_in_log.txt",
+		"log_file_tcp_out": "tcp_out_log.txt",
+		"restart_script": "",
+		"ws_connection": "tcp",
+		"authentication": true,
+		"mongo": false,
+		"sql": true,
+		"blocking_db": true,
+		"enable_log": false,
+		"ws_ts": 24,
+		"modules": {
+			"pi_camera": false,
+			"opencv": false,
+			"tcp_server": true,
+			"watering_system": true,
+			"sound": false
+		}
+	},
+	"release": {
+		"rpi": true,
+		"db_file": "mydatabase.db",
+		"db_path": "",
+		"storage": ".",
+		"storage1": "/home/pi",
+		"log_file_stdout": "stdout_log.txt",
+		"log_file_tcp_in": "tcp_in_log.txt",
+		"log_file_tcp_out": "tcp_out_log.txt",
+		"restart_script": "/home/pi/app_restart.sh",
+		"ws_connection": "tcp",
+		"authentication": true,
+		"mongo": false,
+		"sql": true,
+		"blocking_db": true,
+		"enable_log": false,
+		"ws_ts": 24,
+		"modules":{
+			"pi_camera": true,
+			"opencv": true,
+			"tcp_server": true,
+			"watering_system": true,
+			"sound": false
+		}
 	}
+
 }

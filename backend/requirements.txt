@@ -13,3 +13,5 @@ flask-sockets
 
 flask_cors
 pymongo==2.4.2
+
+mysql-connector

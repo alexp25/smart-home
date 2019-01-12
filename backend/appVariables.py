@@ -168,6 +168,11 @@ def init():
     userSettingsModel = read_json_file('config/settings_model.json')
     appSettings = read_json_file('config/app_settings.json')
 
+    if appConfig['rpi']:
+        appConfig = appConfig['release']
+    else:
+        appConfig = appConfig['debug']
+
     flags = {
         "new_client_data": False,
         "new_server_data": False

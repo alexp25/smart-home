@@ -35,12 +35,16 @@ from flask_socketio import SocketIO
 from flask_socketio import send, emit
 from flask_socketio import disconnect
 
+# from Modules.db_utils import get_single_result
+import Modules.db_utils as db_utils
+
+
 # app modules
 import appVariables
 # only the main modules calls init
 # the other modules using the global variables just import "appVariables"
 appVariables.init()
-appVariables.myList=['test1','test2']
+appVariables.myList = ['test1', 'test2']
 
 from AppModules.DebugPrintThread import DebugPrintThread
 from AppModules.DataBucketThread import DataBucketThread
@@ -56,31 +60,36 @@ from AppModules.ServerManager import ServerManagerThread
 # test
 from AppModules.TCPServerAsync import simple_tcp_server
 
-if appVariables.appConfig['rpi']:
-    if appVariables.appConfig['modules']['opencv']:
+conf = appVariables.appConfig
+print(conf)
+
+if conf['modules']['pi_camera']:
+    if conf['modules']['opencv']:
         from Modules.camerapi_opencv import Camera1
         from AppModules.camera_remote import Camera2
     else:
         from Modules.camerapi import Camera1
-
-    if appVariables.appConfig['modules']['sound']:
-        from Modules.audio_a import audioAnalyzer
-
-    if appVariables.appConfig['ws_connection']=='serial':
-        from Modules.serial_com import serialCom
-        serialcom = serialCom('/dev/rfcomm1', 38400)
-        serialcom.start()
 else:
     from Modules.camerapi_sim import Camera1
+
+if conf['modules']['sound']:
+    from Modules.audio_a import audioAnalyzer
+
+if conf['ws_connection'] == 'serial':
+    from Modules.serial_com import serialCom
+    serialcom = serialCom('/dev/rfcomm1', 38400)
+    serialcom.start()
 
 from Modules.serverCmd import serverCmd
 
 server_cmd = serverCmd()
 
-
-if appVariables.appConfig['mongo'] == True:
+if conf['mongo']:
     from Modules.mongo_db import MongoManager
     from bson import json_util
+elif conf['sql']:
+    from AppModules.DatabaseManagerProcess import DatabaseManagerProcess
+
 
 # app config
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dist')
@@ -89,8 +98,8 @@ static_folder = "dist"
 app = Flask(__name__,static_folder=static_folder, template_folder=tmpl_dir)
 CORS(app, supports_credentials=True,resources=r'/api/*')
 # CORS(app)
-if appVariables.appConfig['rpi'] == False:
-    app.debug = True
+# if appVariables.appConfig['rpi'] == False:
+#     app.debug = True
 ##    app.config['UPLOAD_FOLDER']="user_data"
 #tcp
 sockets = Sockets(app)
@@ -110,25 +119,24 @@ def load_node_model():
 appVariables.clientModelDB = load_node_model()
 
 
-if not appVariables.appConfig['rpi']:
-    with open('config/node_list_test_v2.json') as f:
-        file_contents = f.read()
-    try:
-        appVariables.clientList = json.loads(file_contents)
-        t1=time.time()
-        for i in range(len(appVariables.clientList)):
-            client = appVariables.clientList[i]
-            newClientFcn = copy.deepcopy(appVariables.clientModelFcn)
-            newClientFcn['connection'] = None
-            newClientFcn['q_in'] = Queue(maxsize=10)
-            newClientFcn['q_out'] = Queue(maxsize=10)
-            newClientFcn['t0'] = t1
-            newClientFcn['t0_polling'] = t1
-            newClientFcn['t0_log'] = t1
-            appVariables.clientListFcn.append(newClientFcn)
-            appVariables.clientInfoList.append({'id': client['id'], 'ip': client['ip'], 'type': client['type']})
-    except:
-        print('node list test file exception')
+with open('config/node_list_test_v2.json') as f:
+    file_contents = f.read()
+try:
+    appVariables.clientList = json.loads(file_contents)
+    t1=time.time()
+    for i in range(len(appVariables.clientList)):
+        client = appVariables.clientList[i]
+        newClientFcn = copy.deepcopy(appVariables.clientModelFcn)
+        newClientFcn['connection'] = None
+        newClientFcn['q_in'] = Queue(maxsize=10)
+        newClientFcn['q_out'] = Queue(maxsize=10)
+        newClientFcn['t0'] = t1
+        newClientFcn['t0_polling'] = t1
+        newClientFcn['t0_log'] = t1
+        appVariables.clientListFcn.append(newClientFcn)
+        appVariables.clientInfoList.append({'id': client['id'], 'ip': client['ip'], 'type': client['type']})
+except:
+    print('node list test file exception')
 
 
 def read_virtual_nodes():
@@ -632,7 +640,7 @@ def appdata_servermain_socket(ws):
                     dt = datetime.datetime.now()
                     tm = str(dt.hour).zfill(2)+":"+str(dt.minute).zfill(2)+":"+str(dt.second).zfill(2)
 
-                    if appVariables.appConfig["rpi"]:
+                    if appVariables.appConfig["pi_camera"]:
                         rec = appVariables.raspicam.isRecording()
 
                     if appVariables.queueServerStat.empty()==False:
@@ -772,10 +780,10 @@ def apiVideoFeedConnected():
 def apiVideoFeedProcessed():
     """Video streaming route. Put this in the src attribute of an img tag."""
     if 'user' in session or not appVariables.appConfig['authentication']:
-        if appVariables.appConfig['rpi'] == True:
-            return Response(gen_processed(appVariables.raspicam),mimetype='multipart/x-mixed-replace; boundary=frame')
+        if appVariables.appConfig['pi_camera']:
+            return Response(gen_processed(appVariables.raspicam), mimetype='multipart/x-mixed-replace; boundary=frame')
         else:
-            return Response(gen(appVariables.raspicam),mimetype='multipart/x-mixed-replace; boundary=frame')
+            return Response(gen(appVariables.raspicam), mimetype='multipart/x-mixed-replace; boundary=frame')
 
     else:
         return jsonify({"error":"unauthorized access"})
@@ -801,19 +809,37 @@ def apiDatabaseControlSettings():
                 appVariables.userSettingsModel = appVariables.read_json_file('config/settings_model.json')
                 sid = int(request.args.get('sensorId'))
                 if appVariables.appConfig['mongo']:
-                    if sid==-1:
-                        query=None
+                    if sid == -1:
+                        query = None
                     else:
-                        query={"sensorId":sid}
+                        query = {"s_id":sid}
                     result = appVariables.mongomanager.find("mydb", "control_settings", query)
                     return json.dumps({"settingsModel":appVariables.userSettingsModel['control'],'data':result}, default=json_util.default)
+                elif appVariables.appConfig['sql']:
+                    data = ['']
+                    if sid == -1:
+                        appVariables.qDatabaseIn.put(("/api/database/control-settings",
+                                 "SELECT * FROM ControlSettings ORDER BY s_id ASC", None))
+                    else:
+                        appVariables.qDatabaseIn.put(("/api/database/control-settings",
+                                 "SELECT * FROM ControlSettings WHERE s_id = (?) ORDER BY s_id ASC", (sid,)))
+
+                    while data[0] != "/api/database/control-settings":
+                        data = appVariables.qDatabaseOut.get(True)  # blocking
+
+                    # print(data)
+                    data = db_utils.get_single_result(data)
+                    data = db_utils.load_json_string(data)
+                    return json.dumps({
+                        'data': data
+                    })
             elif request.method == "POST":
                 jsonstr = request.json
                 param = jsonstr['param']
                 if jsonstr['req'] == 1:
                     # update/insert
                     query1 = {
-                        "sensorId": param['sensorId']
+                        "s_id": param['sensorId']
                     }
 
                     if '_id' in param:
@@ -827,13 +853,19 @@ def apiDatabaseControlSettings():
                         appVariables.qDebug1.put(msg)
                 elif jsonstr['req'] == 2:
                     # remove
-                    query1 = {
-                        "sensorId": param['sensorId']
-                    }
-                    result_db = appVariables.mongomanager.remove("mydb", "control_settings", query1)
-                    msg = "[routes][/api/database/control-settings] " + str(result_db)
-                    if not appVariables.qDebug1.full():
-                        appVariables.qDebug1.put(msg)
+                    if appVariables['mongo']:
+                        query1 = {
+                            "s_id": param['sensorId']
+                        }
+                        result_db = appVariables.mongomanager.remove("mydb", "control_settings", query1)
+                        msg = "[routes][/api/database/control-settings] " + str(result_db)
+                        if not appVariables.qDebug1.full():
+                            appVariables.qDebug1.put(msg)
+                    elif appVariables['sql']:
+                        data = ['']
+                        appVariables.qDatabaseIn.put(("/api/database/control-settings", "DELETE FROM Control WHERE ID = (?) ", (param['sensorId'],)))
+                        while data[0] != "/api/database/control-settings":
+                            data = appVariables.qDatabaseOut.get(True)  # blocking
 
                 result = appVariables.const1["RESULT_OK"]
                 return json.dumps({"result": result})
@@ -846,6 +878,8 @@ def apiDatabaseControlSettings():
 
 @app.route('/api/database/nodes',methods=['GET','POST'])
 def apiDatabaseNodes():
+    conf = appVariables.appConfig
+    data = ['']
     if 'user' in session or not appVariables.appConfig['authentication']:
         msg = "[routes][/api/database/nodes]"
         if not appVariables.qDebug1.full():
@@ -855,29 +889,45 @@ def apiDatabaseNodes():
                 if appVariables.appConfig['mongo']:
                     result = appVariables.mongomanager.find("mydb", "sensors", None)
                     return json.dumps(result, default=json_util.default)
+                elif conf['sql']:
+                    appVariables.qDatabaseIn.put(('/data/database/nodes', "SELECT * FROM Sensors ORDER BY s_id ASC", ('')))
+                    while data[0] != '/data/database/nodes':
+                        data = appVariables.qDatabaseOut.get(True)  # blocking
+                    data = db_utils.get_array_result(data)
+                    # return json.dumps({'data': data})
+                    return json.dumps(data)
             elif request.method == "POST":
                 jsonstr = request.json
                 param = jsonstr['param']
-                if jsonstr['req']==1:
-                    # update
-                    query1 = {
-                        "s_id": param['s_id']
-                    }
-                    query2 = {
-                        "$set":{
-                            "info": param['info']
+                if jsonstr['req'] == 1:
+                    if conf['mongo']:
+                        # update
+                        query1 = {
+                            "s_id": param['sensorId']
                         }
-                    }
-                    result_db = appVariables.mongomanager.update("mydb", "sensors", query1, query2, ups=True)
-                    msg = "[routes][/api/database/nodes] " + str(result_db)
-                    if not appVariables.qDebug1.full():
-                        appVariables.qDebug1.put(msg)
-
-                if jsonstr['req']==2:
-                    result_db = appVariables.mongomanager.remove("mydb", "sensors", {"s_id": param['s_id']})
-                    msg = "[routes][/api/database/nodes] " + str(result_db)
-                    if not appVariables.qDebug1.full():
-                        appVariables.qDebug1.put(msg)
+                        query2 = {
+                            "$set":{
+                                "info": param['info']
+                            }
+                        }
+                        result_db = appVariables.mongomanager.update("mydb", "sensors", query1, query2, ups=True)
+                        msg = "[routes][/api/database/nodes] " + str(result_db)
+                        if not appVariables.qDebug1.full():
+                            appVariables.qDebug1.put(msg)
+                    elif conf['sql']:
+                        appVariables.qDatabaseIn.put(('/data/database/nodes', "UPDATE Sensors SET info WHERE s_id = (?)", (param['info'], param['sensorId'],)))
+                        while data[0] != '/data/database/nodes':
+                            data = appVariables.qDatabaseOut.get(True)  # blocking
+                if jsonstr['req'] == 2:
+                    if conf['mongo']:
+                        result_db = appVariables.mongomanager.remove("mydb", "sensors", {"s_id": param['sensorId']})
+                        msg = "[routes][/api/database/nodes] " + str(result_db)
+                        if not appVariables.qDebug1.full():
+                            appVariables.qDebug1.put(msg)
+                    elif conf['sql']:
+                        appVariables.qDatabaseIn.put(('/data/database/nodes', "DELETE FROM Sensors WHERE s_id = (?)", (param['sensorId'],)))
+                        while data[0] != '/data/database/nodes':
+                            data = appVariables.qDatabaseOut.get(True)  # blocking
 
                 result = appVariables.const1["RESULT_OK"]
                 return json.dumps({"result": result})
@@ -909,11 +959,15 @@ def apiGeneralSettings():
             return json.dumps({"result": result})
     else:
         return json.dumps({"error": "unauthorized access"})
+
 @app.route('/api/database/settings', methods=['GET','POST'])
 # @cross_origin(supports_credentials=True)
 def apiDatabaseSettings():
+    conf = appVariables.appConfig
+    data = ['']
     if 'user' in session or not appVariables.appConfig['authentication']:
         msg = "[routes][/api/settings]"
+        data = ['']
         if not appVariables.qDebug1.full():
             appVariables.qDebug1.put(msg)
         try:
@@ -928,20 +982,70 @@ def apiDatabaseSettings():
                         result = {}
                     return json.dumps({"settingsModel": appVariables.userSettingsModel, "userSettings": result,
                                        "nodeModelDB": appVariables.clientModelDB}, default=json_util.default)
+                else:
+                    appVariables.qDatabaseIn.put(('/data/ws/monitor/settings',
+                             "SELECT * FROM Settings WHERE user_id IN (SELECT ID FROM Users WHERE username = (?))",
+                             (user,)))
+                    while data[0] != '/data/ws/monitor/settings':
+                        data = appVariables.qDatabaseOut.get(True)  # blocking
+
+                    data1 = db_utils.get_array_result(data)
+                    # print(data1)
+                    if data1:
+                        data = db_utils.load_json_string_collection(data1)
+                    else:
+                        data = None
+                       
+                    return json.dumps({"settingsModel": appVariables.userSettingsModel, "userSettings": data,
+                                       "nodeModelDB": appVariables.clientModelDB})
+
             elif request.method == "POST":
                 requestJson = request.json
+                user = requestJson['username']
+                jsondata = requestJson['settings']
+
                 if appVariables.appConfig['mongo']:
-                    user = requestJson['username']
-                    jsondata = requestJson['settings']
                     query2 = {
                         "$set": {
                             jsondata["collection"]: jsondata["data"]
                         }
                     }
-                    result_db = appVariables.mongomanager.update("mydb", "user_settings", {"username": user},query2,ups=True)
+                    result_db = appVariables.mongomanager.update("mydb", "user_settings", {"username": user}, query2, ups=True)
                     msg = "[routes][/api/database/settings] " + str(result_db)
                     if not appVariables.qDebug1.full():
                         appVariables.qDebug1.put(msg)
+                elif conf['sql']:
+                    data = ['']
+                    appVariables.qDatabaseIn.put(('/data/ws/monitor/settings',
+                             "SELECT * FROM Settings WHERE user_id IN (SELECT ID FROM Users WHERE username = (?)) AND collection = (?)",
+                             (user, jsondata['collection'])))
+
+                    while data[0] != '/data/ws/monitor/settings':
+                        data = appVariables.qDatabaseOut.get(True)  # blocking
+
+                    data = db_utils.get_single_result(data)
+
+                    if not data or len(data) == 0:
+                        data = ['']
+                        appVariables.qDatabaseIn.put(('/data/ws/monitor/settings',
+                                 "INSERT INTO Settings (ID, collection, user_id, json_config) VALUES (NULL,(?),(SELECT ID FROM Users WHERE username = (?)),(?))",
+                                 (jsondata['collection'], user, json.dumps(jsondata["data"]))))
+
+                        while data[0] != '/data/ws/monitor/settings':
+                            data = appVariables.qDatabaseOut.get(True)  # blocking
+
+                        data = db_utils.get_single_result(data)
+                    else:
+                        data = ['']
+                        appVariables.qDatabaseIn.put(('/data/ws/monitor/settings',
+                                 "UPDATE Settings SET json_config = (?) WHERE user_id IN (SELECT ID FROM Users WHERE username = (?)) AND collection = (?)" ,
+                                 (json.dumps(jsondata["data"]), user, jsondata['collection'])))
+
+                        while data[0] != '/data/ws/monitor/settings':
+                            data = appVariables.qDatabaseOut.get(True)  # blocking
+
+                        data = db_utils.get_single_result(data)
+
 
                 result = appVariables.const1["RESULT_OK"]
                 return json.dumps({"result": result})
@@ -954,6 +1058,8 @@ def apiDatabaseSettings():
 
 @app.route('/api/database/users',methods=['GET','POST'])
 def apiDatabaseUsers():
+    conf = appVariables.appConfig
+    data = ['']
     if 'user' in session or not appVariables.appConfig['authentication']:
         msg = "[routes][/api/database/users]"
         if not appVariables.qDebug1.full():
@@ -963,6 +1069,14 @@ def apiDatabaseUsers():
                 if appVariables.appConfig['mongo']:
                     result = appVariables.mongomanager.find("mydb", "users", None)
                     return json.dumps(result, default=json_util.default)
+                else:
+                    appVariables.qDatabaseIn.put(('/data/database/users', "SELECT * FROM Users", None))
+                    while (data[0] != '/data/database/users'):
+                        data = appVariables.qDatabaseOut.get(True)  # blocking
+                    data = db_utils.get_single_result(data)
+
+                    return json.dumps({'data': data})
+
             if request.method == "POST":
                 js = request.json
                 if appVariables.appConfig['mongo']:
@@ -972,6 +1086,13 @@ def apiDatabaseUsers():
                         msg = "[routes][/api/database/users] " + str(result_db)
                         if not appVariables.qDebug1.full():
                             appVariables.qDebug1.put(msg)
+                elif conf['sql']:
+                    if js['req'] == 2:
+                        # remove user
+                        appVariables.qDatabaseIn.put(('/data/database/users', "DELETE FROM Users WHERE username = (?)", (js['username'],)))
+                        while data[0] != '/data/database/users':
+                            data = appVariables.qDatabaseOut.get(True)  # blocking
+
                 result = appVariables.const1["RESULT_OK"]
                 return json.dumps({"result": result})
         except:
@@ -984,18 +1105,31 @@ def apiDatabaseUsers():
 
 @app.route('/api/database/user-info', methods=['GET', 'POST'])
 def apiDatabaseUserInfo():
+    conf = appVariables.appConfig
     if 'user' in session or not appVariables.appConfig['authentication']:
         msg = "[routes][/api/database/user-info]"
         if not appVariables.qDebug1.full():
             appVariables.qDebug1.put(msg)
 
         if request.method == "GET":
-            username = request.args.get('username')
-            if appVariables.appConfig['mongo']:
-                result = appVariables.mongomanager.find("mydb", "users", {"username":username})
-                result=result[0]
-                del result['password']
-                return json.dumps(result, default=json_util.default)
+            try:
+                username = request.args.get('username')
+                if appVariables.appConfig['mongo']:
+                    result = appVariables.mongomanager.find("mydb", "users", {"username":username})
+                    result = result[0]
+                    del result['password']
+                    return json.dumps(result, default=json_util.default)
+                elif conf['sql']:
+                    data = ['']
+                    appVariables.qDatabaseIn.put(('/api/database/user-info', "SELECT * FROM Users WHERE username=(?)", (username,)))
+                    while data[0] != '/api/database/user-info':
+                        data = appVariables.qDatabaseOut.get(True)  # blocking
+
+                    data = db_utils.get_single_result(data)
+                    return json.dumps(data)
+            except:
+                appVariables.print_exception("[routes][/api/database/user-info]")
+                result = appVariables.const1["RESULT_FAIL"]
         elif request.method == "POST":
             try:
                 js = request.json
@@ -1031,6 +1165,8 @@ def apiDatabaseUserInfo():
 
 @app.route('/api/database/sensors/delete',methods=['GET','POST'])
 def apiDatabaseSensorsDelete():
+    conf = appVariables.appConfig
+    data = ['']
     if 'user' in session or not appVariables.appConfig['authentication']:
         msg = "[routes][/api/database/sensors/delete]"
         if not appVariables.qDebug1.full():
@@ -1041,13 +1177,19 @@ def apiDatabaseSensorsDelete():
         dt = datetime.timedelta(days=js['value'])
         date1 = datenow-dt
 
-        query1 = {
-            "ts":{"$lt":str(date1)}
-        }
-        result_db = appVariables.mongomanager.remove("mydb", "sensor_data", query1)
-        msg = "[routes][/api/database/sensors/delete] " + str(result_db)
-        if not appVariables.qDebug1.full():
-            appVariables.qDebug1.put(msg)
+        if conf['mongo']:
+            query1 = {
+                "ts": {"$lt": str(date1)}
+            }
+            result_db = appVariables.mongomanager.remove("mydb", "sensor_data", query1)
+            msg = "[routes][/api/database/sensors/delete] " + str(result_db)
+            if not appVariables.qDebug1.full():
+                appVariables.qDebug1.put(msg)
+
+        elif conf['sql']:
+            appVariables.qDatabaseIn.put(('/data/database/sensors/delete', "DELETE FROM SensorData WHERE timestamp < (?) ", (date1,)))
+            while data[0] != '/data/database/sensors/delete':
+                data = appVariables.qDatabaseOut.get(True)  # blocking
 
         result = appVariables.const1["RESULT_OK"]
         return json.dumps({"result": result})
@@ -1056,6 +1198,8 @@ def apiDatabaseSensorsDelete():
 
 @app.route('/api/database/sensors/nlast')
 def apiDatabaseSensorsNlast():
+    conf = appVariables.appConfig
+    data = ['']
     if 'user' in session or not appVariables.appConfig['authentication']:
         msg = "[routes][/api/database/sensors/nlast]"
         if not appVariables.qDebug1.full():
@@ -1067,14 +1211,17 @@ def apiDatabaseSensorsNlast():
             cid = param['channelId']
             N = param['n']
             if appVariables.appConfig['mongo']:
-                # result = appVariables.mongomanager.find("mydb","sensor_data",{"s_id":sid,"s_chan":cid})
                 result = appVariables.mongomanager.find_last_records("mydb", "sensor_data", {"s_id": sid, "s_chan": cid}, N)
-
-                # query = {"sensorId": sid}
-                # result = appVariables.mongomanager.find("mydb", "control_settings", query)
-                # query = {"s_id": sid, "s_chan": cid}
-                # result = appVariables.mongomanager..find("mydb", "sensor_data", query).sort([("_id", 1)]).limit(N)
                 return json.dumps(result, default=json_util.default)
+            elif conf['sql']:
+                appVariables.qDatabaseIn.put(('/data/database/sensors/nlast',
+                         "SELECT * FROM (SELECT * FROM SensorData WHERE s_id = (?) ORDER BY ts DESC LIMIT " + str(
+                             N) + ") ORDER BY ts ASC", (str(sid))))
+                while data[0] != '/data/database/sensors/nlast':
+                    data = appVariables.qDatabaseOut.get(True)  # blocking
+
+                data = db_utils.get_single_result(data)
+                return json.dumps({'data': data})
         except:
             appVariables.print_exception("[routes][/api/database/sensors/nlast]")
             result = appVariables.const1["RESULT_FAIL"]
@@ -1085,6 +1232,8 @@ def apiDatabaseSensorsNlast():
 
 @app.route('/api/database/sensors/last')
 def apiDatabaseSensorsLast():
+    conf = appVariables.appConfig
+    data = ['']
     if 'user' in session or not appVariables.appConfig['authentication']:
         msg = "[routes][/api/database/sensors/last]"
         if not appVariables.qDebug1.full():
@@ -1096,6 +1245,7 @@ def apiDatabaseSensorsLast():
             cid = param['channelId']
             date1 = datetime.datetime.now()
             startdate = date1 - datetime.timedelta(hours=param['h'])
+            enddate = date1.replace(hour=int(value[2]), minute=int(value[3]), second=0, microsecond=0)
             # "2017-02-19 14:12:42.979000"
             if appVariables.appConfig['mongo']:
                 query={"s_id": sid,
@@ -1105,15 +1255,25 @@ def apiDatabaseSensorsLast():
                 # result = appVariables.mongomanager.find("mydb","sensor_data",{"s_id":sid,"s_chan":cid})
                 result = appVariables.mongomanager.find_last_records("mydb", "sensor_data", query, 0)
                 return json.dumps(result, default=json_util.default)
+            elif conf['sql']:
+                appVariables.qDatabaseIn.put(('/data/database/sensors/last',
+                         "SELECT * FROM SensorData WHERE ts BETWEEN (?) AND (?) AND s_id = (?) ORDER BY ts ASC",
+                         (startdate, enddate, str(sid))))
+                while data[0] != '/data/database/sensors/last':
+                    data = appVariables.qDatabaseOut.get(True)  # blocking
+                data = db_utils.get_single_result(data)
+                return json.dumps({'data': data})
         except:
             appVariables.print_exception("[routes][/api/database/sensors/last]")
             result = appVariables.const1["RESULT_FAIL"]
             return json.dumps({"result": result})
     else:
-        return jsonify({"error":"unauthorized access"})
+        return jsonify({"error": "unauthorized access"})
 
 @app.route('/api/database/control', methods = ['GET','POST'])
 def apiDatabaseControl():
+    conf = appVariables.appConfig
+    data = ['']
     if 'user' in session or not appVariables.appConfig['authentication']:
         msg = "[routes][/api/database/control]"
         if not appVariables.qDebug1.full():
@@ -1124,10 +1284,10 @@ def apiDatabaseControl():
                 n = request.args.get('n')
                 # param = request.args.get('params')
                 # param = json.loads(param)
-                # sid = param['s_id']
+                # sid = param['sensorId']
                 # n = param['n']
-                sid=int(sid)
-                n=int(n)
+                sid = int(sid)
+                n = int(n)
 
                 # sid = int(sid)
                 # n = int(n)
@@ -1136,23 +1296,36 @@ def apiDatabaseControl():
                     # return json.dumps(result, default=json_util.default)
                     result = appVariables.mongomanager.find_last_records("mydb", "control_data", {"s_id": sid}, n)
                     return json.dumps(result, default=json_util.default)
+                elif conf['sql']:
+                    if sid == -1:
+                        appVariables.qDatabaseIn.put(("/api/database/control",
+                                                      "SELECT * FROM Control ORDER BY ts ASC", None))
+                    else:
+                        appVariables.qDatabaseIn.put(("/api/database/control",
+                                                      "SELECT * FROM Control WHERE s_id = (?) ORDER BY ts ASC",
+                                                      (sid,)))
+                    while data[0] != "/api/database/control":
+                        data = appVariables.qDatabaseOut.get(True)  # blocking
+
+                    data = db_utils.get_single_result(data)
+                    return json.dumps({'data': data})
             else:
                 jdata=request.json
                 print(jdata)
                 # if (req == 1):
                 #     # remove selected
-                #     appVariables.qDatabaseIn.put(("/api/database/control","DELETE FROM Control WHERE ID = (?) AND SensorId = (?) " ,(rowid,sid)))
+                #     appVariables.qDatabaseIn.put(("/api/database/control","DELETE FROM Control WHERE ID = (?) AND s_id = (?) " ,(rowid,sid)))
                 # if (req == 2):
                 #     # remove range
                 #     appVariables.qDatabaseIn.put(("/api/database/control","DELETE FROM Control WHERE\
-                #                         ID BETWEEN (?) AND (?) AND SensorId = (?) " ,(row1,row2,sid)))
+                #                         ID BETWEEN (?) AND (?) AND s_id = (?) " ,(row1,row2,sid)))
                 # if (req == 3):
                 #     # remove all
-                #     appVariables.qDatabaseIn.put(("/api/database/control","DELETE FROM Control WHERE SensorId = (?)",(sid,)))
+                #     appVariables.qDatabaseIn.put(("/api/database/control","DELETE FROM Control WHERE s_id = (?)",(sid,)))
                 if jdata['req']==1:
                     # remove latest samples
                     pass
-                    # data = request_db((request.remote_addr+"/api/database/control","DELETE FROM Control WHERE ID IN (SELECT ID FROM Control WHERE SensorId = (?) ORDER BY Timestamp DESC LIMIT " + str(jdata['n']) + ")" ,(jdata['sid'],)))
+                    # data = request_db((request.remote_addr+"/api/database/control","DELETE FROM Control WHERE ID IN (SELECT ID FROM Control WHERE s_id = (?) ORDER BY Timestamp DESC LIMIT " + str(jdata['n']) + ")" ,(jdata['sid'],)))
 
                 result = appVariables.const1["RESULT_OK"]
                 return json.dumps({"result": result})
@@ -1587,6 +1760,7 @@ def apiIsLoggedIn():
 def apiLogin():
     json_data = request.json
     msg = "[routes][/api/login]" + " user: " + json_data['username']
+    result = appVariables.const1["RESULT_FAIL"]
     if not appVariables.qDebug1.full():
         appVariables.qDebug1.put(msg)
     try:
@@ -1596,18 +1770,28 @@ def apiLogin():
                 session['user'] = True
                 session.permanent = False
                 result = appVariables.const1["RESULT_OK"]
-                return json.dumps({"result": result})
             else:
                 result = appVariables.const1["RESULT_FAIL"]
-                return json.dumps({"result": result})
+        elif appVariables.appConfig["sql"]:
+            appVariables.qDatabaseIn.put(('/api/login', "SELECT * FROM Users WHERE username=(?) AND password=(?)", (json_data['username'], json_data['password'])))
+            data = ['']
+            while data[0] != '/api/login':
+                data = appVariables.qDatabaseOut.get(True)  # blocking
+
+            data = db_utils.get_single_result(data)
+
+            if data:
+                session['user'] = True
+                session.permanent = False
+                result = appVariables.const1["RESULT_OK"]
         else:
             # no database
             if json_data['username'] == 'alex' and json_data['password'] == 'coto25':
                 session['user'] = True
                 session.permanent = False
                 result = appVariables.const1["RESULT_OK"]
-                return json.dumps({"result": result})
 
+        return json.dumps({"result": result})
     except:
         appVariables.print_exception("[routes][/api/login]")
         result = appVariables.const1["RESULT_FAIL"]
@@ -1745,26 +1929,28 @@ if __name__ == '__main__':
     thread8 = ControlSystemsThread()
     thread8.start()
 
+    conf = appVariables.appConfig
+    if conf['modules']['opencv']:
+        appVariables.camera_remote = Camera2(None, appVariables.qDebug1)
+    if conf['modules']['sound']:
+        appVariables.audio_a1 = audioAnalyzer()
+        thread7 = SoundDataThread()
+        thread7.start()
+    if conf['modules']['pi_camera']:
+        appVariables.raspicam = Camera1(640, 480, appVariables.qDebug1)
+    else:
+        appVariables.raspicam = Camera1()
 
-    if appVariables.appConfig['rpi']:
-        if appVariables.appConfig['modules']['opencv']:
-            appVariables.camera_remote = Camera2(None, appVariables.qDebug1)
-        if appVariables.appConfig['modules']['sound']:
-            appVariables.audio_a1 = audioAnalyzer()
-            thread7 = SoundDataThread()
-            thread7.start()
-        if appVariables.appConfig['modules']['pi_camera']:
-            appVariables.raspicam = Camera1(640, 480, appVariables.qDebug1)
-        else:
-            appVariables.raspicam = Camera1()
+    if conf["mongo"]:
+        appVariables.mongomanager = MongoManager()
+    elif conf["sql"]:
+        p = Process(target=DatabaseManagerProcess, args=(
+        appVariables.qDatabaseIn, appVariables.qDatabaseOut, appVariables.qDebug1,
+        conf["storage"] + "/" + conf['db_file']))
+        p.start()
 
-        if appVariables.appConfig["mongo"]:
-            appVariables.mongomanager = MongoManager()
-            thread8 = ServerManagerThread()
-            thread8.start()
-
-    # p = Process(target=DatabaseManagerProcess, args=(appVariables.qDatabaseIn,appVariables.qDatabaseOut,appVariables.qDebug1,appVariables.appConfig["storage"] + "/" + appVariables.appConfig['db_file']))
-    # p.start()
+    thread8 = ServerManagerThread()
+    thread8.start()
 
     msg = "[main] " + 'server started'
     if not appVariables.qDebug1.full():
