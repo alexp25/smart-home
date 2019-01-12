@@ -620,6 +620,7 @@ def appdata_servermain_socket(ws):
 
     if 'user' in session or not appVariables.appConfig['authentication']:
         print("begin connection")
+        socket_closed = False
         while not ws.closed:
             message = ws.receive()
             # print("receive: ", message)
@@ -668,7 +669,10 @@ def appdata_servermain_socket(ws):
                             ws.send(json.dumps(jsondata))
                     except:
                         appVariables.print_exception("[sockets][/app-data/server-main]")
+                        socket_closed = True
                         break
+            if socket_closed:
+                break
 
     msg = "[sockets][/app-data/server-main] " + "close"
     if not appVariables.qDebug1.full():
