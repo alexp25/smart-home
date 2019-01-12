@@ -32,12 +32,7 @@ class TCPServerThread(Thread):
             server.bind((TCP_IP, TCP_PORT))
             server.listen(5)
         except:
-            exc_type, exc_value = sys.exc_info()[:2]
-            exceptionMessage = str(exc_type.__name__) + ': ' + str(exc_value)
-
-            msg = "[TCPServerThread] exception: " + exceptionMessage
-            if not appVariables.qDebug1.full():
-                appVariables.qDebug1.put(msg)
+            appVariables.print_exception("[TCPServerThread]")
             return
 
         # Sockets from which we expect to read

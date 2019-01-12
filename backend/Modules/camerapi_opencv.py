@@ -54,11 +54,7 @@ class RecordingThread(threading.Thread):
                         if self.qDebug1.full() == False:
                             self.qDebug1.put(msg)
             except:
-                exc_type, exc_value = sys.exc_info()[:2]
-                exceptionMessage = str(exc_type.__name__) + ': ' + str(exc_value)
-                msg = self.name + ' thread error: ' + exceptionMessage
-                if self.qDebug1.full() == False:
-                    self.qDebug1.put(msg)
+                appVariables.print_exception("[RecordingThread]")
 
 class ProcessingThread(threading.Thread):
     def __init__(self, threadID, name, q_image_in, q_image_out, q_res, q_dbg):
@@ -105,8 +101,8 @@ class ProcessingThread(threading.Thread):
                     thresh = cv2.dilate(thresh, None, iterations=2)
 
                     # TODO: this is for different opencv versions compatibility
-                    # image, cnts, hierarchy = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-                    cnts, hierarchy = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                    (image_x, cnts, hierarchy) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                    # (cnts, hierarchy) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
                     ncont = 0
                     # loop over the contours
@@ -144,11 +140,7 @@ class ProcessingThread(threading.Thread):
                             self.q_result.put(result)
 
             except:
-                exc_type, exc_value = sys.exc_info()[:2]
-                exceptionMessage = str(exc_type.__name__) + ': ' + str(exc_value)
-                msg = self.name + ' thread error: '+exceptionMessage
-                if self.qDebug1.full() == False:
-                    self.qDebug1.put(msg)
+                appVariables.print_exception("[ProcessingThread]")
 
 
 class CameraThread(threading.Thread):
@@ -402,6 +394,7 @@ class Camera1(object):
             time.sleep(0.05)
         return self.q_image.get(block=False)
 
+
     def has_frame(self):
         return not self.q_image.empty()
 
@@ -418,6 +411,7 @@ class Camera1(object):
         while self.q_image_proc.empty():
             time.sleep(0.05)
         return self.q_image_proc.get(block=False)
+
 
     def get_processing_result(self):
         result = None

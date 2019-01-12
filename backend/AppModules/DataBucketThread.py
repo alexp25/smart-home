@@ -204,9 +204,4 @@ class DataBucketThread(Thread):
                 flag5 = False
 
             except:
-                exc_type, exc_value = sys.exc_info()[:2]
-                exceptionMessage = str(exc_type.__name__) + ': ' + str(exc_value)
-                crt_time = datetime.datetime.now().strftime("%H:%M:%S.%f")
-                msg = "[DataBucketThread] " + exceptionMessage
-                if not appVariables.qDebug1.full():
-                    appVariables.qDebug1.put(msg)
+                appVariables.print_exception("[DataBucketThread]")

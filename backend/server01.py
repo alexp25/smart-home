@@ -603,73 +603,72 @@ def app_data_sound_socket(ws, enableDebugPrint=False):
 
 @sockets.route('/app-data/server-main')
 def appdata_servermain_socket(ws):
-
     counter_poll = 0
-
     jsondata = {
         'info': 'no data',
         'connection':False,
     }
-    debugInfo = ''
-    temp=0
-    cpu=0
-    rec=False
-    n_threads=0
-
-    t0=time.time()
-
+    debug_info = ''
+    temp = 0
+    cpu = 0
+    rec = False
+    n_threads = 0
+    t0 = time.time()
     msg = "[sockets][/app-data/server-main] " + "open"
     if not appVariables.qDebug1.full():
         appVariables.qDebug1.put(msg)
 
     if 'user' in session or not appVariables.appConfig['authentication']:
+        print("begin connection")
         while not ws.closed:
             message = ws.receive()
+            # print("receive: ", message)
             while True:
                 gevent.sleep(0.01)
                 dt = time.time() - t0
                 if (dt >= 0.5) or appVariables.flags["new_server_data"] or (not appVariables.qDebug2.empty()):
                     t0 = time.time()
-                    appVariables.flags["new_server_data"]=False
+                    appVariables.flags["new_server_data"] = False
+                    # print("will send")
+                    # ws.send("wait for it")
+
                     try:
-                        jsondata = json.loads(message)
+                        counter_poll = counter_poll + 1
+                        dt = datetime.datetime.now()
+                        tm = str(dt.hour).zfill(2)+":"+str(dt.minute).zfill(2)+":"+str(dt.second).zfill(2)
+
+                        if appVariables.appConfig['modules']["pi_camera"]:
+                            rec = appVariables.raspicam.isRecording()
+
+                        if not appVariables.queueServerStat.empty():
+                            ss = appVariables.queueServerStat.get(block=False)
+                            temp = ss['temp']
+                            cpu = ss['cpu']
+                            n_threads = ss['n_threads']
+
+                        info = '<span>' + str(counter_poll) + '&emsp;Server time: ' + tm + '&emsp;active threads: '+str(n_threads)+\
+                               '</span>'
+
+                        if not appVariables.qDebug2.empty():
+                            debug_info = appVariables.qDebug2.get(block=False)
+                        else:
+                            debug_info = ''
+
+                        jsondata = {
+                            'counter': counter_poll,
+                            'info': info,
+                            'temp': temp,
+                            'cpu': cpu,
+                            'rec': str(rec),
+                            'debug': debug_info
+                        }
+
+                        if not ws.closed:
+                            # print("sending: ", json.dumps(jsondata))
+                            ws.send(json.dumps(jsondata))
                     except:
                         appVariables.print_exception("[sockets][/app-data/server-main]")
-
-                    counter_poll = counter_poll + 1
-                    dt = datetime.datetime.now()
-                    tm = str(dt.hour).zfill(2)+":"+str(dt.minute).zfill(2)+":"+str(dt.second).zfill(2)
-
-                    if appVariables.appConfig["pi_camera"]:
-                        rec = appVariables.raspicam.isRecording()
-
-                    if appVariables.queueServerStat.empty()==False:
-                        ss=appVariables.queueServerStat.get(block=False)
-                        temp=ss['temp']
-                        cpu=ss['cpu']
-                        n_threads=ss['n_threads']
-
-                    info = '<span>' + str(counter_poll) + '&emsp;Server time: ' + tm + '&emsp;active threads: '+str(n_threads)+\
-                           '</span>'
-
-                    if appVariables.qDebug2.empty()==False:
-                        debugInfo = appVariables.qDebug2.get()
-                    else:
-                        debugInfo=''
-
-                    jsondata = {
-                        'counter': counter_poll,
-                        'info': info,
-                        'temp': temp,
-                        'cpu': cpu,
-                        'rec': str(rec),
-                        'debug': debugInfo
-                    }
-
-                    if not ws.closed:
-                        ws.send(json.dumps(jsondata))
-
-                    break
+                        break
 
     msg = "[sockets][/app-data/server-main] " + "close"
     if not appVariables.qDebug1.full():
@@ -690,7 +689,7 @@ def gen(camera):
 
 def gen_processed(camera):
     """Video streaming generator function."""
-    # empty residual images
+
     if camera.has_processed_frame():
         frame = camera.get_processed_frame()
 
@@ -700,6 +699,7 @@ def gen_processed(camera):
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
+
 def gen_remote(camera,url):
     camera.stop()
     camera.set_url(url)
@@ -707,6 +707,7 @@ def gen_remote(camera,url):
     # empty residual images
     if camera.has_frame():
         frame = camera.get_frame()
+
     while True:
         gevent.sleep(appVariables.frameInterval)
         frame = camera.get_frame()
@@ -745,8 +746,20 @@ def apiVideoFeed():
     if 'user' in session or not appVariables.appConfig['authentication']:
         return Response(gen(appVariables.raspicam),mimetype='multipart/x-mixed-replace; boundary=frame')
     else:
-        return jsonify({"error":"unauthorized access"})
+        return jsonify({"error": "unauthorized access"})
 
+
+@app.route('/api/video-feed-processed')
+def apiVideoFeedProcessed():
+    """Video streaming route. Put this in the src attribute of an img tag."""
+    if 'user' in session or not appVariables.appConfig['authentication']:
+        if appVariables.appConfig['modules']['opencv']:
+            return Response(gen_processed(appVariables.raspicam), mimetype='multipart/x-mixed-replace; boundary=frame')
+        else:
+            return Response(gen(appVariables.raspicam), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+    else:
+        return jsonify({"error": "unauthorized access"})
 
 @app.route('/api/video-feed/redirect',methods=['GET'])
 def apiVideoFeedRedirect():
@@ -773,20 +786,6 @@ def apiVideoFeedConnected():
     else:
         return jsonify({"error": "camera is not available"})
 
-
-
-
-@app.route('/api/video-feed-processed')
-def apiVideoFeedProcessed():
-    """Video streaming route. Put this in the src attribute of an img tag."""
-    if 'user' in session or not appVariables.appConfig['authentication']:
-        if appVariables.appConfig['pi_camera']:
-            return Response(gen_processed(appVariables.raspicam), mimetype='multipart/x-mixed-replace; boundary=frame')
-        else:
-            return Response(gen(appVariables.raspicam), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-    else:
-        return jsonify({"error":"unauthorized access"})
 
 @app.route('/api/jpeg-feed')
 def apiJpegFeed():

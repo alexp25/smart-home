@@ -154,12 +154,7 @@ class ControlSystemsThread(Thread):
                                         appVariables.clientListFcn[i]['q_out'].put(new_data)
                                     break
                 except:
-                    exc_type, exc_value = sys.exc_info()[:2]
-                    exceptionMessage = str(exc_type.__name__) + ': ' + str(exc_value)
-                    em1 = 'Error on line {}'.format(sys.exc_info()[-1].tb_lineno)
-                    msg = "[ControlSystemsThread] " + em1 + ', ' + exceptionMessage
-                    if not appVariables.qDebug1.full():
-                        appVariables.qDebug1.put(msg)
+                    appVariables.print_exception("[DataBucketThread]")
 
 
                     # print (output)

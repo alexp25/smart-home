@@ -73,9 +73,4 @@ def DatabaseManagerProcess(qDatabaseIn, qDatabaseOut, qDebug1, dbfile):
                 conn.close()
 
             except:
-                exc_type, exc_value = sys.exc_info()[:2]
-                exceptionMessage = str(exc_type.__name__) + ': ' + str(exc_value)
-                msg = "[DatabaseManagerProcess] " + exceptionMessage
-                if not qDebug1.full():
-                    qDebug1.put(msg)
-                continue
+                appVariables.print_exception("[DataBucketThread]")
