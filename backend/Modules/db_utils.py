@@ -2,17 +2,18 @@ import json
 
 
 def get_array_result(data):
-    print(data)
 
     if not data:
         return None
 
     if len(data):
         data = data[1]
+        if not data:
+            return None
         data = json.loads(data)
-    else:
-        data = None
-    return data
+        return data
+
+    return None
 
 
 def get_single_result(data):

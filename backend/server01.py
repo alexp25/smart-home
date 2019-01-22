@@ -1219,12 +1219,12 @@ def apiDatabaseSensorsNlast():
             elif conf['sql']:
                 appVariables.qDatabaseIn.put(('/data/database/sensors/nlast',
                          "SELECT * FROM (SELECT * FROM SensorData WHERE s_id = (?) ORDER BY ts DESC LIMIT " + str(
-                             N) + ") ORDER BY ts ASC", (str(sid))))
+                             N) + ") ORDER BY ts ASC", (str(sid),)))
                 while data[0] != '/data/database/sensors/nlast':
                     data = appVariables.qDatabaseOut.get(True)  # blocking
 
-                data = db_utils.get_single_result(data)
-                return json.dumps({'data': data})
+                data = db_utils.get_array_result(data)
+                return json.dumps(data)
         except:
             appVariables.print_exception("[routes][/api/database/sensors/nlast]")
             result = appVariables.const1["RESULT_FAIL"]
@@ -1264,8 +1264,8 @@ def apiDatabaseSensorsLast():
                          (startdate, enddate, str(sid))))
                 while data[0] != '/data/database/sensors/last':
                     data = appVariables.qDatabaseOut.get(True)  # blocking
-                data = db_utils.get_single_result(data)
-                return json.dumps({'data': data})
+                data = db_utils.get_array_result(data)
+                return json.dumps(data)
         except:
             appVariables.print_exception("[routes][/api/database/sensors/last]")
             result = appVariables.const1["RESULT_FAIL"]

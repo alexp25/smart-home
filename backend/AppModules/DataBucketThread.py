@@ -29,10 +29,10 @@ class DataBucketThread(Thread):
                 if appVariables.appConfig['modules']['pi_camera']:
                     if appVariables.raspicam is not None:
                         video_processing_result = appVariables.raspicam.get_processing_result()
-                        if video_processing_result is not None:
-                            msg="[DataBucketThread] " + "video processing: " + json.dumps(video_processing_result)
-                            if not appVariables.qDebug1.full():
-                                appVariables.qDebug1.put(msg)
+                        # if video_processing_result is not None:
+                        #     msg = "[DataBucketThread] " + "video processing: " + json.dumps(video_processing_result)
+                        #     if not appVariables.qDebug1.full():
+                        #         appVariables.qDebug1.put(msg)
 
                 # get data from nodes and prepare for display
                 t1 = time.time()
@@ -148,51 +148,55 @@ class DataBucketThread(Thread):
                                                 appVariables.clientList[i]['id']) + ', cid: ' + str(cid)
                                             if not appVariables.qDebug1.full():
                                                 appVariables.qDebug1.put(msg)
-
-                                            if appVariables.appConfig['mongo']:
-                                                doc = {
-                                                    "s_id":appVariables.clientList[i]['id'],
-                                                    "s_type":appVariables.clientList[i]['type'],
-                                                    "s_chan":cid,
-                                                    "ts": str(timestamp),
-                                                    "value": cdata['data'][pos]
-                                                }
-                                                appVariables.mongomanager.insert("mydb","sensor_data",doc)
-
-                                                # add sensor to database or update sensor info
-                                                query1 = {
-                                                    "s_id":appVariables.clientList[i]['id']
-                                                }
-                                                query2 = {
-                                                    "$set":{
+                                            try:
+                                                if appVariables.appConfig['mongo']:
+                                                    doc = {
                                                         "s_id":appVariables.clientList[i]['id'],
                                                         "s_type":appVariables.clientList[i]['type'],
-                                                        # "n_chan":len(cdata['data'])
-                                                        "n_chan": len(datatypes)
+                                                        "s_chan":cid,
+                                                        "ts": str(timestamp),
+                                                        "value": cdata['data'][pos]
                                                     }
-                                                }
-                                                appVariables.mongomanager.update("mydb", "sensors", query1, query2, ups=True)
-                                            elif appVariables.appConfig['sql']:
-                                                data = ['']
-                                                appVariables.qDatabaseIn.put(('dataBucketThread',
-                                                         'SELECT * FROM Sensors WHERE sensorId = (?)', (appVariables.clientList[i]['id'])))
-                                                while data[0] != 'dataBucketThread':
-                                                    data = appVariables.qDatabaseOut.get(True)  # blocking
+                                                    appVariables.mongomanager.insert("mydb","sensor_data",doc)
 
-                                                data = db_utils.get_array_result(data)
-
-                                                if not data or not len(data)>0:
+                                                    # add sensor to database or update sensor info
+                                                    query1 = {
+                                                        "s_id":appVariables.clientList[i]['id']
+                                                    }
+                                                    query2 = {
+                                                        "$set":{
+                                                            "s_id":appVariables.clientList[i]['id'],
+                                                            "s_type":appVariables.clientList[i]['type'],
+                                                            # "n_chan":len(cdata['data'])
+                                                            "n_chan": len(datatypes)
+                                                        }
+                                                    }
+                                                    appVariables.mongomanager.update("mydb", "sensors", query1, query2, ups=True)
+                                                elif appVariables.appConfig['sql']:
                                                     data = ['']
-                                                    appVariables.qDatabaseIn.put(('dataBucketThread2',
-                                                                                  'INSERT INTO Sensors (ID, sensorId, s_type, n_chan) VALUES (NULL, (?))',
-                                                                                  (appVariables.clientList[i]['id'], appVariables.clientList[i]['type']),len(datatypes)))
-                                                    while data[0] != 'dataBucketThread2':
+                                                    appVariables.qDatabaseIn.put(('dataBucketThread',
+                                                             'SELECT * FROM Sensors WHERE s_id = (?)', (appVariables.clientList[i]['id'],)))
+
+                                                    while data[0] != 'dataBucketThread':
                                                         data = appVariables.qDatabaseOut.get(True)  # blocking
 
-                                                data = ['']
-                                                appVariables.qDatabaseIn.put(('dataBucketThread3',
-                                                         'INSERT INTO SensorData (ID, s_id, s_type, s_chan, s_unit, ts, value) VALUES(NULL, (?), (?), (?), (?), (?), (?))',
-                                                         (appVariables.clientList[i]['id'], appVariables.clientList[i]['type'], cid, None, str(timestamp), cdata['data'][pos])))
+                                                    # print(data)
+                                                    data = db_utils.get_array_result(data)
+
+                                                    if not data or not len(data) > 0:
+                                                        data = ['']
+                                                        appVariables.qDatabaseIn.put(('dataBucketThread2',
+                                                                                      'INSERT INTO Sensors (ID, s_id, s_type, n_chan) VALUES (NULL, (?), (?), (?))',
+                                                                                      (appVariables.clientList[i]['id'], appVariables.clientList[i]['type'], len(datatypes))))
+                                                        while data[0] != 'dataBucketThread2':
+                                                            data = appVariables.qDatabaseOut.get(True)  # blocking
+
+                                                    data = ['']
+                                                    appVariables.qDatabaseIn.put(('dataBucketThread3',
+                                                             'INSERT INTO SensorData (ID, s_id, s_type, s_chan, s_unit, ts, value) VALUES(NULL, (?), (?), (?), (?), (?), (?))',
+                                                             (appVariables.clientList[i]['id'], appVariables.clientList[i]['type'], cid, None, str(timestamp), cdata['data'][pos])))
+                                            except:
+                                                appVariables.print_exception("[DataBucketThread]")
 
                                 else:
                                     break
