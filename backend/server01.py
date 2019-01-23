@@ -56,6 +56,10 @@ from AppModules.IrrigationControlThread import IrrigationControlThread
 from AppModules.DatabaseManagerProcess import DatabaseManagerProcess
 from AppModules.ServerManager import ServerManagerThread
 
+from Modules.mqtt_client import MQTTClient
+from Modules.mqtt_manager import MQTTManager
+
+
 
 # test
 from AppModules.TCPServerAsync import simple_tcp_server
@@ -1922,6 +1926,11 @@ if __name__ == '__main__':
         t = threading.Thread(target=simple_tcp_server)
         t.daemon = True
         t.start()
+
+    # mqttManager = MQTTManager()
+    # mqttManager.create_client()
+    # mqttManager.run()
+
 
     thread5 = DebugPrintThread()
     thread5.start()
