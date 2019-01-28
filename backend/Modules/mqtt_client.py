@@ -11,6 +11,7 @@ class MQTTClient:
         self.broker_address = Constants.MQTT_BROKER
         self.client = None
 
+
     def disconnect(self):
         if self.client:
             self.client.loop_stop()

@@ -1,6 +1,6 @@
 import time
 from constants import Constants
-from mqtt_client import MQTTClient
+from Modules.mqtt_client import MQTTClient
 
 class MQTTManager:
     def __init__(self):

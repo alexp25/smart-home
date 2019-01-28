@@ -1252,7 +1252,7 @@ def apiDatabaseSensorsLast():
             cid = param['channelId']
             date1 = datetime.datetime.now()
             startdate = date1 - datetime.timedelta(hours=param['h'])
-            enddate = date1.replace(hour=int(value[2]), minute=int(value[3]), second=0, microsecond=0)
+            enddate = date1.replace(second=0, microsecond=0)
             # "2017-02-19 14:12:42.979000"
             if appVariables.appConfig['mongo']:
                 query={"s_id": sid,
@@ -1594,7 +1594,7 @@ def apiModelNodes():
         if request.method == "GET":
             return jsonify({"nodeModelDB": appVariables.clientModelDB})
     else:
-        return jsonify({"error":"unauthorized access"})
+        return jsonify({"error": "unauthorized access"})
 
 
 #### DOWNLOAD FILES

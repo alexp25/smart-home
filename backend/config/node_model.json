@@ -149,20 +149,21 @@
   {
     "id": 3,
     "class": "sensor",
-    "type": "air_gas",
+    "type": "gas",
+    "topic": "wsn/gas",
     "model": 1,
     "configuration": {
       "communication": {
-        "polling": 0.5
+        "polling": 2
       },
       "metadata": [{
           "id": 1,
-          "pos":1,
+          "pos": 1,
           "type": "gas concentration",
           "unit": "",
           "multiplier": 1,
           "minValue": 0,
-          "maxValue": 100,
+          "maxValue": 1023,
           "log": 600
         }
       ],
