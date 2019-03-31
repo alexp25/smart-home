@@ -1,4 +1,8 @@
 Flask==0.10.1
+
+gevent
+greenlet
+
 Flask_SocketIO
 itsdangerous==0.24
 Jinja2==2.7.3

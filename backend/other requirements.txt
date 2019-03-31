@@ -2,3 +2,14 @@ sudo apt-get install ffmpeg x264 libx264-dev
 
 ffmpeg:
 sudo apt-get install libav-tools
+
+gevent:
+sudo apt-get install libevent-dev python-all-dev
+
+install gevent (fix)
+
+pip install -U pip
+pip install -U setuptools
+
+The greenlet problem has also disappeared.
+It that a correct solution?

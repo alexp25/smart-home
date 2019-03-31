@@ -1447,11 +1447,13 @@ def apiWsProgram():
 
             csv = "".join([str(el)+',' for el in a])
             csv = csv[:-1]
-            msg = "[routes][/api/ws/program] " + csv
-            if not appVariables.qDebug1.full():
-                appVariables.qDebug1.put(msg)
+
 
             cmd_string = str(cmdcode) + ','+csv
+
+            msg = "[routes][/api/ws/program] " + cmd_string
+            if not appVariables.qDebug1.full():
+                appVariables.qDebug1.put(msg)            
 
             if not appVariables.wsOutQueue.full():
                 appVariables.wsOutQueue.put(cmd_string)
