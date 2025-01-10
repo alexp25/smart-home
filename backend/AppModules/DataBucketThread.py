@@ -23,7 +23,7 @@ class DataBucketThread(Thread):
         # this thread gathers data from other modules and dispatches to control threads
         while True:
             try:
-                time.sleep(0.01)
+                time.sleep(0.1)
 
                 # get data from video processing
                 if appVariables.appConfig['modules']['pi_camera']:

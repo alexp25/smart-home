@@ -47,7 +47,7 @@ class DebugPrintThread(Thread):
         print(msg)
 
         while True:
-            time.sleep(0.01)
+            time.sleep(0.1)
             t1=time.time()
             for s in data_source:
                 if not s['q'].empty():

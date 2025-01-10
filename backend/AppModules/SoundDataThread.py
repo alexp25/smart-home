@@ -11,7 +11,7 @@ class SoundDataThread(Thread):
             appVariables.qDebug1.put(msg)
 
         while True:
-            time.sleep(0.01)
+            time.sleep(0.1)
             audioData = appVariables.audio_a1.getData()
             # print ('soundData')
             # print(audioData)

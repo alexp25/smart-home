@@ -107,7 +107,11 @@ CORS(app, supports_credentials=True,resources=r'/api/*')
 ##    app.config['UPLOAD_FOLDER']="user_data"
 #tcp
 sockets = Sockets(app)
-socketio = SocketIO(app)
+# socketio = SocketIO(app, logger=True, engineio_logger=True, allow_unsafe_legacy=True)
+socketio = SocketIO(app, allow_unsafe_legacy=True)
+
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 def load_node_model():
     m=[]
@@ -173,14 +177,14 @@ def request_db(req):
     data=['',None]
     t0=time.time()
     while appVariables.qDatabaseIn.full():
-        time.sleep(0.1)
+        gevent.sleep(0.01)
     appVariables.qDatabaseIn.put(req)
     if appVariables.appConfig['blocking_db']:
         while (data[0] != req[0]):
             data = appVariables.qDatabaseOut.get(block=True,timeout=10)
     else:
         while (data[0] != req[0]):
-            time.sleep(0.1)
+            gevent.sleep(0.01)
             if time.time() - t0 > appVariables.db_timeout:
                 break
             # data = appVariables.qDatabaseOut.get(block=True, timeout=10) #blocking
@@ -252,7 +256,7 @@ def getdata_appdata(counter):
         try:
             t0 = time.time()
             data = False
-            time.sleep(0.01)
+            gevent.sleep(0.01)
             if appVariables.queue_ws_app_data.empty() == False:
                 data = appVariables.queue_ws_app_data.get(block=False)
             # data="211,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"
@@ -350,26 +354,30 @@ def getcommands_appdata(jsondata):
 @sockets.route('/app-data')
 def appdata_socket(ws):
     counter_poll = 0
-    n = 10
-    count_retry = 0
-    t0=time.time()
-
-    if 'user' in session or not appVariables.appConfig['authentication']:
-        msg = "[sockets][/app-data] " + "open"
+    
+    msg = "[sockets][/app-data] " + "open"
+    if not appVariables.qDebug1.full():
+        appVariables.qDebug1.put(msg)
+        
+    if 'user' in session or not appVariables.appConfig['authentication']:       
+        msg = "[sockets][/app-data] " + "authenticated"
         if not appVariables.qDebug1.full():
             appVariables.qDebug1.put(msg)
+            
         while not ws.closed:
             message = ws.receive()
-            try:
-                jsondata=json.loads(message)
-                getcommands_appdata(jsondata)
-            except:
-                appVariables.print_exception("[sockets][/app-data]")
+            if message is not None:
+                try:
+                    jsondata = json.loads(message)
+                    getcommands_appdata(jsondata)
+                except:
+                    appVariables.print_exception("[sockets][/app-data]")                   
 
             counter_poll = counter_poll + 1
             jsondata = getdata_appdata(counter_poll)
             if not ws.closed:
                 ws.send(json.dumps(jsondata))
+                
         msg = "[sockets][/app-data] " + "close"
         if not appVariables.qDebug1.full():
             appVariables.qDebug1.put(msg)
@@ -502,10 +510,6 @@ def getcommands_appdata_monitorview(jsondata):
 @sockets.route('/app-data/monitor-view')
 def appdata_monitorview_socket(ws):
     counter_poll = 0
-    n = 10
-    count_retry = 0
-
-    resp=False
     msg = "[sockets][/app-data/monitor-view] " + "open"
     if not appVariables.qDebug1.full():
         appVariables.qDebug1.put(msg)
@@ -516,25 +520,31 @@ def appdata_monitorview_socket(ws):
         if appVariables.virtualNodeList is not None:
             appVariables.virtualNodeList = sync_device_controls(appVariables.virtualNodeList)
 
-        msg = "[sockets][/app-data/monitor-view] " + "open2"
+        msg = "[sockets][/app-data/monitor-view] " + "authenticated"
         if not appVariables.qDebug1.full():
             appVariables.qDebug1.put(msg)
 
         while not ws.closed:
             message = ws.receive()
             params = None
-            try:
-                jsondata = json.loads(message)
-                params = getcommands_appdata_monitorview(jsondata)
-            except:
-                appVariables.print_exception("[sockets][/app-data/monitor-view]")
+           
+            # msg = "[sockets][/app-data/monitor-view] " + "ws message received: " + (message if message is not None else "None")
+            # if not appVariables.qDebug1.full():
+            #     appVariables.qDebug1.put(msg)
+            
+            if message is not None:
+                try:
+                    jsondata = json.loads(message)
+                    params = getcommands_appdata_monitorview(jsondata)
+                except:
+                    appVariables.print_exception("[sockets][/app-data/monitor-view]")
 
-            jsondata = getdata_appdata_monitorview(params,counter_poll)
-            # print(jsondata)
-            counter_poll = counter_poll + 1
-            if not ws.closed:
-                ws.send(json.dumps(jsondata))
-
+                jsondata = getdata_appdata_monitorview(params,counter_poll)
+                # print(jsondata)
+                counter_poll = counter_poll + 1
+                if not ws.closed:
+                    ws.send(json.dumps(jsondata))
+                    
 
     msg = "[sockets][/app-data/monitor-view] " + "close"
     if not appVariables.qDebug1.full():
@@ -1369,7 +1379,7 @@ def apiWsProgram():
             while True:
                 t0 = time.time()
                 while time.time() - t0 < 3:
-                    time.sleep(0.01)
+                    gevent.sleep(0.01)
                     if not appVariables.queue_ws_app_data.empty():
                         data = appVariables.queue_ws_app_data.get(block=False)
                         if data != False:
@@ -1493,7 +1503,7 @@ def apiWsSetup():
                 while True:
                     t0 = time.time()
                     while time.time() - t0 < 3:
-                        time.sleep(0.01)
+                        gevent.sleep(0.01)
                         if not appVariables.queue_ws_app_data.empty():
                             data = appVariables.queue_ws_app_data.get(block=False)
                             if data != False:

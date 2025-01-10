@@ -11,7 +11,7 @@ class TCPRequestHandler(socketserver.StreamRequestHandler):
             self.data=''
             self.index=0
             while 1:
-                time.sleep(0.01)
+                time.sleep(0.1)
                 t1=time.time()
                 # self.data = self.request.recv(1024)
                 # self.c = self.request.recv(1)

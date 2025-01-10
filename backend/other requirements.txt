@@ -13,3 +13,10 @@ pip install -U setuptools
 
 The greenlet problem has also disappeared.
 It that a correct solution?
+
+picamera on raspberry OS:
+# sudo apt install -y libraspberrypi-bin libraspberrypi-dev libraspberrypi-doc
+
+sudo apt install -y libcap-dev
+
+picamera not working on raspi OS bookworm!

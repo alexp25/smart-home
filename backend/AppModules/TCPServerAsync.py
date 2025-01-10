@@ -149,7 +149,7 @@ class TCPRequestHandler(socketserver.StreamRequestHandler):
                     if appVariables.clientList[i]['ip'] == self.client_address[0]:
                         if (t1 - appVariables.clientListFcn[i]['t0']) > 10:
                             appVariables.clientListFcn[i]['t0'] = t1
-                            msg = "[TCPRequestHandler] " + ' no data ' + ' at  ' + str(self.client_address[0]) + '. socket closed'
+                            msg = "[TCPRequestHandler] " + ' no data at  ' + str(self.client_address[0]) + '. socket closed'
                             if not appVariables.qDebug1.full():
                                 appVariables.qDebug1.put(msg)
 

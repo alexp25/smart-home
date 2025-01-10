@@ -1,0 +1,15 @@
+[Unit]
+Description=My Python Script with Virtual Environment
+After=network.target
+
+[Service]
+ExecStart=/bin/bash -c 'source /home/pi/Desktop/smart_home/myenv/bin/activate && ~/.pyenv/versions/3.8.16/bin/python3.8 /home/pi/Desktop/smart_home/server01.py'
+WorkingDirectory=/home/pi/Desktop/smart_home/
+Restart=always
+User=pi
+Group=pi
+StandardOutput=inherit
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target
